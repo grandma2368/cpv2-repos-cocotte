@@ -12,9 +12,10 @@ for line in fileinput.input():
     #verifie si l'utilisateur souhaite quitter le programme et agit en consequence
     if line.rstrip() == "exit":
         sys.exit()
-    parsing.parsing(line.rstrip(), data)
+    elif line.rstrip() == "data":
+        #AMELIORER L'AFFICHAGE DE DATA
+        print(data)
+    else:
+        parsing.parsing(line.rstrip(), data)
     #IL FAUT FAIRE DU PARSING ICI --> FAIRE UNE FONCTION DEDIEE
     #IL FAUT CHECKER SI LA VARIABLE EXISTE DEJA --> SI EXISTE REASSIGNER --> SINON CREER ENTREE ET LUI ASSIGNER VALEUR
-    for test in data:
-        print("varName = ", test[0].replace(" ", ""))
-        print("varValue = ", test[1].replace(" ", ""))

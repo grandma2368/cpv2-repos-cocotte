@@ -1,6 +1,35 @@
+#check le nom de la fonction et si la fonction a bien une variable
+def checkFunction(varName, varValue, data):
+    res = varName.split('(')
+    ukn = res[1].split(')')
+    if ukn[1] in varValue:
+        datum = [varName, varValue]
+        data.append(datum)
+    else:
+        #il n'y a pas de variable dans la fonction
+        print("il n'y a pas de variable dans la fonction")
+        return("error")
+    print(varValue)
+
 def newVarInData(varName, varValue, data):
     varValue.lower()
     varName.lower()
+
+    #recherche si le nom de variable ne contient que des lettres ou non
+    i = 0
+    lenght = len(varName)
+    while i < lenght:
+        agree = "azertyuiopqsdfghjklmwxcvbn()"
+        if varName[i] in agree:
+            i += 1
+        else:
+            #le nom de la variable ne contient pas que des lettres --> cas d'erreur
+            return("error")
+    if '(' in varName:
+        #CHECKER LA FONCTION ET FAIRE L'ASSIGNATION DE FONCTION
+        checkFunction(varName, varValue, data)
+        return
+    #recherche si la variable est à calculer à partir d'autre ou non ou si matrice
     i = 0
     lenght = len(varValue)
     while i < lenght:
@@ -9,8 +38,10 @@ def newVarInData(varName, varValue, data):
             i += 1
         else:
             #RECHERCHER LES VARIABLES DANS DATA
+            #RECHERCHER SI C EST UNE MATRICE
             print("pas un calcul ou une variable de deja donnee")
             return
+    #enregistre la variable dans data
     datum = [varName, varValue]
     data.append(datum)
     #POUR LE TEST
@@ -39,4 +70,5 @@ def parsing(line, data):
         #CHECKER S IL Y A UNE VALEUR DEJA DE DONNEE OU S'IL FAUT LA CALCULER
         #VOIR SI C'EST UNE ASSIGNATION PAR RAPPORT A UNE VARIABLE DEJA EXISTANTE
         #ENTRER LA VARIABLE DANS DATA
-        newVarInData(res[0].replace(" ", ""), res[1].replace(" ", ""), data)
+        if newVarInData(res[0].replace(" ", ""), res[1].replace(" ", ""), data) == "error":
+            return("error")
