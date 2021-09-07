@@ -1,8 +1,23 @@
 def newVarInData(varName, varValue, data):
+    varValue.lower()
+    varName.lower()
+    i = 0
+    lenght = len(varValue)
+    while i < lenght:
+        agree = "1234567890+-/*i"
+        if varValue[i] in agree:
+            i += 1
+        else:
+            #RECHERCHER LES VARIABLES DANS DATA
+            print("pas un calcul ou une variable de deja donnee")
+            return
     datum = [varName, varValue]
     data.append(datum)
+    #POUR LE TEST
+    print("variable bien enregistree")
 
 def isAlreadyExist(varName, data):
+    varName.lower()
     for eachVar in data:
         if eachVar[0] == varName:
             print("existe dans data dans fonction isAlreadyExist")
