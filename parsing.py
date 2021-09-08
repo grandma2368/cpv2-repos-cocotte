@@ -1,8 +1,24 @@
 import utils
+import calcul
 
-#parse la partie calcul
-def parsExpression(pb):
-    print("entre dans parsExpression")
+#checke s'il faut remplacer des valeurs dans data et les remplace par leur valeur
+def checkVar(exp, data):
+    for vrb in exp:
+        if utils.checkString(vrb, "qwertyuiopasdfghjklzxcvbnm") == 0:
+            #variable pour savoir si la variable a ete trouvee ou non dans data
+            found = 0
+            for datum in data:
+                if datum[0] == vrb:
+                    vrb = datum[1]
+                    found = 1
+            if found == 0:
+                print("la variable ", vrb ," n'existe pas encore dans data")
+                return("error")
+    #calcule l'expression pour rentree le resultat dans data
+    calcul.calculate(exp, data)
+
+#parse la partie calcul, fnt determine s'il s'agit du parsing de l'expression d'une fonction ou d'un calcul
+def parsExpression(pb, data, fnt):
     i = 0
     lenght = len(pb)
     #contient chaque partie de l'equation
@@ -52,9 +68,14 @@ def parsExpression(pb):
     if prt != 0:
         print("pb de parentheses")
         return("error")
-    #POUR LE TESTE
-    print("debug du parse de la partie calculatoire")
-    print(exp)
+    #renvoie vers le remplacement des varaibles s'il ne s'agit pas de l'expression d'une fonction
+    if fnt == 0:
+        if checkVar(exp, data) == "error":
+            print("Certaines variables sont inconnues")
+            return("error")
+    else:
+        #FAIRE UNE FONCTION POUR REDUIRE L'EXPRESSION DE LA FONCTION
+        print("cas ou il faut reduire au maximum l expression de la fonction")
 
 #cherche si le probleme est correcte ou non
 def isItAProb(pb, data):
@@ -134,8 +155,10 @@ def parsing(line, data):
             if isItAProb(res[0].replace(" ", ""), data) == "error":
                 return("error")
         else:
-            if parsExpression(res[1].replace(" ", "")) == "error":
+            #PHASE DE TEST DE parsExpression
+            if parsExpression(res[1].replace(" ", "").lower(), data, 0) == "error":
                 print("une erreur est survenue dans le parsing de l expression")
+                return("error")
             #verifie s'il s'agit d'une reassignation de variable
             if isReassignated(res[0].replace(" ", ""), res[1].replace(" ", ""), data) != "reassigned":
                 #CHECKER S IL Y A UNE VALEUR DEJA DE DONNEE OU S'IL FAUT LA CALCULER
