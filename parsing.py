@@ -1,5 +1,61 @@
 import utils
 
+#parse la partie calcul
+def parsExpression(pb):
+    print("entre dans parsExpression")
+    i = 0
+    lenght = len(pb)
+    #contient chaque partie de l'equation
+    exp = []
+    #verifie que toute parenthese ouverte est fermee plus tard
+    prt = 0
+    while i < lenght:
+        #contient le nombre ou le nom de variable en train d'etre lu
+        vrb = ''
+        if i == 0 and pb[i] == '-' or i == 0 and pb[i] == '(':
+            if pb[i] == '(':
+                prt += 1
+            exp.append(pb[i])
+            i += 1
+        #verifie si une donnee a ete trouvee
+        found = 0
+        while i < lenght and utils.checkChr(pb[i], "0123456789") == 0:
+            found = 1
+            vrb = vrb + pb[i]
+            i += 1
+        if found == 1:
+            exp.append(vrb)
+        else:
+            while i < lenght and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
+                found = 1
+                vrb = vrb + pb[i]
+                i += 1
+            if found == 1:
+                exp.append(vrb)
+        if found == 1 and i < lenght :
+            if utils.checkChr(pb[i], "^%*+-/)") == 0:
+                exp.append(pb[i])
+                found = 0
+            else:
+                #il n'y a pas de symbole de calcul entre deux nombres ou deux variables
+                print("il n'y a pas de symbole de calcul entre deux nombres ou deux variables")
+                return("error")
+        if i < lenght and pb[i] == '(':
+            prt += 1
+            exp.append(pb[i])
+        if i < lenght and pb[i] == ')':
+            prt -= 1
+        if prt < 0:
+            print("une parenthese fermante n'est pas accompagnee d'une ouvrante")
+            return("error")
+        i += 1
+    if prt != 0:
+        print("pb de parentheses")
+        return("error")
+    #POUR LE TESTE
+    print("debug du parse de la partie calculatoire")
+    print(exp)
+
 #cherche si le probleme est correcte ou non
 def isItAProb(pb, data):
     name = pb.lower()
@@ -78,6 +134,8 @@ def parsing(line, data):
             if isItAProb(res[0].replace(" ", ""), data) == "error":
                 return("error")
         else:
+            if parsExpression(res[1].replace(" ", "")) == "error":
+                print("une erreur est survenue dans le parsing de l expression")
             #verifie s'il s'agit d'une reassignation de variable
             if isReassignated(res[0].replace(" ", ""), res[1].replace(" ", ""), data) != "reassigned":
                 #CHECKER S IL Y A UNE VALEUR DEJA DE DONNEE OU S'IL FAUT LA CALCULER

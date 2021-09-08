@@ -8,3 +8,10 @@ def checkString(str, agree):
         else:
             return(-1)
     return(0)
+
+#check si le char est dans agree ou non --> erreur == -1 / succes == 0
+def checkChr(chr, agree):
+    if chr in agree:
+        return(0)
+    else:
+        return(-1)
