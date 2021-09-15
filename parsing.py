@@ -131,7 +131,7 @@ def newVarInData(varName, varValue, data):
         #checke si la fonction est correcte et assigne la fonction
         checkFunction(name, value, data)
         return
-    #recherche si la variable est à calculer à partir d'autre ou non ou si matrice
+    #recherche si la variable est a calculer a partir d'autre ou non ou si matrice
     if utils.checkString(value, "1234567890+-/.*i%^()") == -1:
         #RECHERCHER LES VARIABLES DANS DATA
         #RECHERCHER SI C EST UNE MATRICE
