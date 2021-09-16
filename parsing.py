@@ -58,6 +58,8 @@ def parsExpression(pb):
             else:
                 #il n'y a pas de symbole de calcul entre deux nombres ou deux variables du coup on suppose une multiplication
                 exp.append('*')
+                if pb[i] != '(' and pb[i] != ')':
+                    exp.append(pb[i])
         if i < lenght and pb[i] == '(':
             prt += 1
             exp.append(pb[i])
@@ -103,11 +105,11 @@ def checkFunction(varName, varValue, data):
         return("error")
     res = varName.split('(')
     ukn = res[1].split(')')
-    if ukn[1] in varValue:
+    if ukn[0] in varValue:
         exp = parsExpression(varValue)
         if exp == "error":
             return("error")
-        if calcul :
+        if calcul.reduceFonction(exp, data, varName, ukn[0]) == "error":
             return("error")
         datum = [varName, varValue]
         data.append(datum)

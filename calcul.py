@@ -153,7 +153,7 @@ def replaceVariablesFunction(exp, data, vrb):
                 if el[0] == exp[i]:
                     exp[i] = el[1]
                     found = 1
-            if found == 0 and exp[i] != vrb:
+            if exp[i] != vrb and found == 0:
                 print("Une variable de l'expression n'est pas enregistree dans data.")
                 return("error")
         i += 1
@@ -179,8 +179,6 @@ def reduceFonctionExp(exp, vrb):
             exp[i] = calc[i]
             exp.pop(i + 2)
             exp.pop(i + 1)
-    #DEBUG/TEST
-    print("exp = ", exp)
     return("error")
 
 #reduit la calcul d'une fonction
