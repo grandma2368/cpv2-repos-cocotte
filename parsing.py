@@ -56,9 +56,8 @@ def parsExpression(pb):
                 exp.append(pb[i])
                 found = 0
             else:
-                #il n'y a pas de symbole de calcul entre deux nombres ou deux variables
-                print("il n'y a pas de symbole de calcul entre deux nombres ou deux variables")
-                return("error")
+                #il n'y a pas de symbole de calcul entre deux nombres ou deux variables du coup on suppose une multiplication
+                exp.append('*')
         if i < lenght and pb[i] == '(':
             prt += 1
             exp.append(pb[i])
