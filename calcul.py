@@ -82,7 +82,7 @@ def calcParenthesis(start, end, exp):
 def checkParenthesis(exp):
     #recupere l'indice de la parenthese ouvrante prioritaire
     prtOpen = 0
-    #vois s'il y a une parenthese fermante
+    #voit s'il y a une parenthese fermante
     prtClosed = 0
     i = 0
     for prt in exp:
@@ -179,11 +179,10 @@ def reduceFonctionExp(exp, vrb):
             exp[i] = calc[i]
             exp.pop(i + 2)
             exp.pop(i + 1)
-    return("error")
 
 #reduit la calcul d'une fonction
 def reduceFonction(exp, data, name, vrb):
     if replaceVariablesFunction(exp, data, vrb) == "error":
         return("error")
-    if reduceFonctionExp(exp, vrb) == "error":
-        return("error")
+    reduceFonctionExp(exp, vrb)
+    #TROUVER UN MOYEN DE REDUIRE l'INTERIEUR DES PARENTHESES QUAND C'EST POSSIBLE MAIS NE PAS LES SUPPRIMER
