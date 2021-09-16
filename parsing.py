@@ -116,15 +116,18 @@ def newVarInData(varName, varValue, data):
     #recherche si la variable est a calculer a partir d'autre ou non ou si matrice
     if utils.checkString(value, "1234567890+-/.*i%^()") == -1:
         #RECHERCHER LES VARIABLES DANS DATA
-        if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == -1:
+        if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == 0:
             exp = parsExpression(value)
             if exp == "error":
                 return("error")
             if calcul.calculateWithVariables(exp, data, name) == "error":
                 return("error")
+            else:
+                return
         #RECHERCHER SI C EST UNE MATRICE
-        print("pas un calcul ou une variable de deja donnee")
-        return
+        else:
+            print("Des caracteres ne sont pas propices au calcul.")
+            return("error")
     
     #enregistre la variable dans data
     exp = parsExpression(value)

@@ -119,16 +119,19 @@ def calculate(exp, data, name):
 
 #checke et remplace les variables par leur valeur dans data
 def replaceVariables(exp, data):
-    for vrb in exp:
-        if utils.checkString(vrb, "qwertyuiopasdfghjklzxcvbnm") == 0:
+    i = 0
+    lenght = len(exp)
+    while i < lenght:
+        if utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
             found = 0
             for el in data:
-                if el[0] == vrb:
-                    vrb = el[1]
+                if el[0] == exp[i]:
+                    exp[i] = el[1]
                     found = 1
             if found == 0:
                 print("Une variable de l'expression n'est pas enregistree dans data.")
                 return("error")
+        i += 1
 
 #checke les variables et les remplace si elles sont dans data puis resoud/reduit le calcul
 def calculateWithVariables(exp, data, name):
