@@ -73,20 +73,27 @@ def parsExpression(pb):
 
 #cherche si le probleme est correcte ou non
 def isItAProb(pb, data):
-    name = pb.lower()
+    pbm = pb.lower()
     for eachVar in data:
-        if eachVar[0] == name:
-            #renvoie la valeur de la variable trouvee
+        if eachVar[0] == pbm:
+            #renvoie la valeur de la donnnee trouvee
             print(eachVar[1])
             return
-    #IL S'AGIT D'UN CALCUL A RESOUDRE --> A GERER
-    #VERIFIER LES PRIORITES DE CALCUL
-    if utils.checkString(name, "1234567890+-/.*i%^()") == -1:
+    if utils.checkString(pbm, "1234567890+-/.*%^()") == 0:
+        exp = parsExpression(pbm)
+        if exp == "error":
+            return("error")
+        if calcul.calculate(exp, data, 0) == "error":
+            return("error")
+    else:
+        #PEUT ETRE NO:BRE IMAGINAIRE
+        #PEUT ETRE MATRICE
         #VERIFIER S'IL Y A UNE FONCTION DANS DATA
         #VERIFIER S'IL Y A DES VARIABLES A REMPLACER PAR LEUR VALEUR DANS DATA
+        #DEBUG/TEST
+        print("calcul avec des lettres ou une matrice")
         return("error")
-    print("calcul a resoudre")
-    return()
+    return
 
 #checke le nom de la fonction et si la fonction a bien une variable
 def checkFunction(varName, varValue, data):

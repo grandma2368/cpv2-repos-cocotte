@@ -2,6 +2,15 @@ import fileinput
 import sys
 import parsing
 
+#RESTE A FAIRE
+#
+#
+#GERER LES MATRICES
+#GERER LES FONCTIONS
+#GERER LES POLYNOMES
+#GERER LES IMAGINAIRES
+#GERER LES FLOAT
+
 #entree du programme
 
 #initialisation de data qui contiendra toutes les variables pdt le temps d execution du programme
@@ -17,5 +26,3 @@ for line in fileinput.input():
         print(data)
     else:
         parsing.parsing(line.rstrip(), data)
-    #IL FAUT FAIRE DU PARSING ICI --> FAIRE UNE FONCTION DEDIEE
-    #IL FAUT CHECKER SI LA VARIABLE EXISTE DEJA --> SI EXISTE REASSIGNER --> SINON CREER ENTREE ET LUI ASSIGNER VALEUR

@@ -97,7 +97,7 @@ def checkParenthesis(exp):
                 return("error")
         i += 1
 
-#calcule une expression pour l'enregistrer dans data
+#calcule une expression pour l'enregistrer dans data, name est a 0 s'il s'agit juste d'un calcul a resoudre
 def calculate(exp, data, name):
     #effectue le caclul s'il s'agit de nombres reels
     if checkParenthesis(exp) == "error":
@@ -105,6 +105,10 @@ def calculate(exp, data, name):
     #calcule ce qui reste dans exp a la fin
     if someCalcul(exp) == "error":
         return("error")
+    #check si c'est un calcul ou variable a assigner
+    if name == 0:
+        print(exp[0])
+        return
     #check pour reassigner ou non une variable
     reassigned = 0
     for eachVar in data:
@@ -114,8 +118,6 @@ def calculate(exp, data, name):
     if reassigned == 0:
         datum = [name, exp[0]]
         data.append(datum)
-    #DEBUG/TEST
-    print("data = ", data)
 
 #checke et remplace les variables par leur valeur dans data
 def replaceVariables(exp, data):
