@@ -2,7 +2,7 @@ import utils
 import calcul
 
 #checke s'il faut remplacer des valeurs dans data et les remplace par leur valeur
-def checkVar(exp, data):
+def checkVar(exp, data, name):
     for vrb in exp:
         if utils.checkString(vrb, "qwertyuiopasdfghjklzxcvbnm") == 0:
             #variable pour savoir si la variable a ete trouvee ou non dans data
@@ -15,10 +15,11 @@ def checkVar(exp, data):
                 print("la variable ", vrb ," n'existe pas encore dans data")
                 return("error")
     #calcule l'expression pour rentree le resultat dans data
-    calcul.calculate(exp, data)
+    if calcul.calculate(exp, data, name) == "error":
+        return("error")
 
-#parse la partie calcul, fnt determine s'il s'agit du parsing de l'expression d'une fonction ou d'un calcul
-def parsExpression(pb, data, fnt):
+#parse la partie calcul
+def parsExpression(pb):
     i = 0
     lenght = len(pb)
     #contient chaque partie de l'equation
@@ -68,14 +69,7 @@ def parsExpression(pb, data, fnt):
     if prt != 0:
         print("pb de parentheses")
         return("error")
-    #renvoie vers le remplacement des varaibles s'il ne s'agit pas de l'expression d'une fonction
-    if fnt == 0:
-        if checkVar(exp, data) == "error":
-            print("Certaines variables sont inconnues")
-            return("error")
-    else:
-        #FAIRE UNE FONCTION POUR REDUIRE L'EXPRESSION DE LA FONCTION
-        print("cas ou il faut reduire au maximum l expression de la fonction")
+    return(exp)
 
 #cherche si le probleme est correcte ou non
 def isItAProb(pb, data):
@@ -94,30 +88,18 @@ def isItAProb(pb, data):
     print("calcul a resoudre")
     return()
 
-#cherche si la variable existe deja dans data et dans ce cas la reassigne
-def isReassignated(varName, varValue, data):
-    value = varValue.lower()
-    name = varName.lower()
-
-    for eachVar in data:
-        if eachVar[0] == name:
-            #reassigned la nouvelle valeur
-            eachVar[1] = value
-            print(eachVar[1])
-            return("reassigned")
-
 #checke le nom de la fonction et si la fonction a bien une variable
 def checkFunction(varName, varValue, data):
     res = varName.split('(')
     ukn = res[1].split(')')
     if ukn[1] in varValue:
+        #FAIRE UNE FONCTION POUR REDUIRE AU MAXIMUM L'EXPRESSION DE LA FONCTION
         datum = [varName, varValue]
         data.append(datum)
     else:
         #il n'y a pas de variable dans la fonction
         print("il n'y a pas de variable dans la fonction")
         return("error")
-    print(varValue)
 
 #cree une nouvelle variable si les donnees sont correctes
 def newVarInData(varName, varValue, data):
@@ -134,13 +116,22 @@ def newVarInData(varName, varValue, data):
     #recherche si la variable est a calculer a partir d'autre ou non ou si matrice
     if utils.checkString(value, "1234567890+-/.*i%^()") == -1:
         #RECHERCHER LES VARIABLES DANS DATA
+        if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == -1:
+            exp = parsExpression(value)
+            if exp == "error":
+                return("error")
+            if calcul.calculateWithVariables(exp, data, name) == "error":
+                return("error")
         #RECHERCHER SI C EST UNE MATRICE
         print("pas un calcul ou une variable de deja donnee")
         return
+    
     #enregistre la variable dans data
-    datum = [name, value]
-    data.append(datum)
-    print(value)
+    exp = parsExpression(value)
+    if exp == "error":
+        return("error")
+    if calcul.calculate(exp, data, name) == "error":
+        return("error")
     
 #fonction d'entree dans le parsing
 def parsing(line, data):
@@ -155,13 +146,6 @@ def parsing(line, data):
             if isItAProb(res[0].replace(" ", ""), data) == "error":
                 return("error")
         else:
-            #PHASE DE TEST DE parsExpression
-            if parsExpression(res[1].replace(" ", "").lower(), data, 0) == "error":
-                print("une erreur est survenue dans le parsing de l expression")
+            #ammorce les checks avant enregistrement de la variable
+            if newVarInData(res[0].replace(" ", ""), res[1].replace(" ", ""), data) == "error":
                 return("error")
-            #verifie s'il s'agit d'une reassignation de variable
-            if isReassignated(res[0].replace(" ", ""), res[1].replace(" ", ""), data) != "reassigned":
-                #CHECKER S IL Y A UNE VALEUR DEJA DE DONNEE OU S'IL FAUT LA CALCULER
-                #VOIR SI C'EST UNE ASSIGNATION PAR RAPPORT A UNE VARIABLE DEJA EXISTANTE
-                if newVarInData(res[0].replace(" ", ""), res[1].replace(" ", ""), data) == "error":
-                    return("error")
