@@ -141,3 +141,30 @@ def calculateWithVariables(exp, data, name):
         return("error")
     if calculate(exp, data, name) == "error":
         return("error")
+
+#checke et remplace les variables dans une fonction
+def replaceVariablesFunction(exp, data, vrb):
+    i = 0
+    lenght = len(exp)
+    while i < lenght:
+        if utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
+            found = 0
+            for el in data:
+                if el[0] == exp[i]:
+                    exp[i] = el[1]
+                    found = 1
+            if found == 0 and exp[i] != vrb:
+                print("Une variable de l'expression n'est pas enregistree dans data.")
+                return("error")
+        i += 1
+
+#reduit l'expression d'une fonction et l'assigne dans data si tout est correct
+def reduceFonctionExp(exp, dadta, vrb, name):
+    return("error")
+
+#reduit la calcul d'une fonction
+def reduceFonction(exp, data, name, vrb):
+    if replaceVariablesFunction(exp, data, vrb) == "error":
+        return("error")
+    if reduceFonctionExp(exp, data, vrb, name) == "error":
+        return("error")

@@ -1,6 +1,8 @@
 import utils
 import calcul
 
+#T'ES EN TRAIN DE BOSSER SUR LES FONCTIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 #checke s'il faut remplacer des valeurs dans data et les remplace par leur valeur
 def checkVar(exp, data, name):
     for vrb in exp:
@@ -86,7 +88,7 @@ def isItAProb(pb, data):
         if calcul.calculate(exp, data, 0) == "error":
             return("error")
     else:
-        #PEUT ETRE NO:BRE IMAGINAIRE
+        #PEUT ETRE NOMBRE IMAGINAIRE
         #PEUT ETRE MATRICE
         #VERIFIER S'IL Y A UNE FONCTION DANS DATA
         #VERIFIER S'IL Y A DES VARIABLES A REMPLACER PAR LEUR VALEUR DANS DATA
@@ -97,15 +99,22 @@ def isItAProb(pb, data):
 
 #checke le nom de la fonction et si la fonction a bien une variable
 def checkFunction(varName, varValue, data):
+    if varName[0] == "i" and varName[1] == "(":
+        print("Une fonction ne peut porter le nom de 'i' a cause des nombres imaginaires.")
+        return("error")
     res = varName.split('(')
     ukn = res[1].split(')')
     if ukn[1] in varValue:
-        #FAIRE UNE FONCTION POUR REDUIRE AU MAXIMUM L'EXPRESSION DE LA FONCTION
+        exp = parsExpression(varValue)
+        if exp == "error":
+            return("error")
+        if calcul :
+            return("error")
         datum = [varName, varValue]
         data.append(datum)
     else:
         #il n'y a pas de variable dans la fonction
-        print("il n'y a pas de variable dans la fonction")
+        print("Il n'y a pas de variable dans la fonction.")
         return("error")
 
 #cree une nouvelle variable si les donnees sont correctes
@@ -115,13 +124,19 @@ def newVarInData(varName, varValue, data):
 
     #recherche si le nom de variable ne contient que des lettres ou non
     if utils.checkString(name, "azertyuiopqsdfghjklmwxcvbn()") == -1:
+        print("Le nom de la fonction est invalide.")
         return("error")
+    if len(name) == 1 and name[0] == 'i':
+        print("Une variable ne peut etre nommee 'i' en raison des nombres imaginaires.")
+        return("error")
+
     if '(' in name:
         #checke si la fonction est correcte et assigne la fonction
-        checkFunction(name, value, data)
+        if checkFunction(name, value, data) == "error":
+            return("error")
         return
     #recherche si la variable est a calculer a partir d'autre ou non ou si matrice
-    if utils.checkString(value, "1234567890+-/.*i%^()") == -1:
+    if utils.checkString(value, "1234567890+-/.*%^()") == -1:
         #RECHERCHER LES VARIABLES DANS DATA
         if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == 0:
             exp = parsExpression(value)
