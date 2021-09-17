@@ -2,22 +2,22 @@ import utils
 
 #multiplie deux nombres
 def multiply(a, b):
-    c = int(a) * int(b)
+    c = float(a) * float(b)
     return(c)
 
 #divise deux nombres
 def divide(a, b):
-    c = int(a) / int(b)
+    c = float(a) / float(b)
     return(c)
 
 #modulo deux nombres
 def modulo(a, b):
-    c = int(a) % int(b)
+    c = float(a) % float(b)
     return(c)
 
 #additionne deux nombres
 def add(a, b):
-    c = int(a) + int(b)
+    c = float(a) + float(b)
     return(c)
 
 #calcule ce qu'il y a dans le tableau
