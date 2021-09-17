@@ -157,7 +157,7 @@ def parsExpression(pb):
         j = i
         indexPrt = prt
         #checke les variables et functions
-        if found == 1 and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
+        if i < lenght and found == 1 and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
             exp.append('*')
         while i < lenght and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
             if pb[i] == '(' and i != j:
@@ -180,6 +180,8 @@ def parsExpression(pb):
                 print("Toute fonction doit avoir sa variable definie entre deux parentheses, une '(' et une ')'.")
                 return("error")
         exp.append(vrb)
+    #DEBUG/TEST
+    print("exp = ", exp)
     return(exp)
         
 #parse la partie calcul
