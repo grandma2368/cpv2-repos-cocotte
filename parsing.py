@@ -34,12 +34,14 @@ def parseLigneMatrice(i, pb, ln, lenght):
                 pnt += 1
             vrb = vrb + pb[i]
             found = 1
+            i += 1
         if pnt > 1:
             print("Un nombre decimal ne peut contenir qu'un '.'.")
             return("error")
         if found == 1:
             lnLocal += 1
             if pb[i] == ',':
+                found = 0
                 ligne.append(vrb)
                 i += 1
             elif pb[i] == ']':
@@ -56,13 +58,9 @@ def parseLigneMatrice(i, pb, ln, lenght):
                 print("Une matrice doit etre definie de la maniere suivante : [[a,b];[c,d]].")
                 return("error")
         while utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
-            if pb[i] == '.':
-                pnt += 1
             vrb = vrb + pb[i]
             found = 1
-        if pnt > 1:
-            print("Un nombre decimal ne peut contenir qu'un '.'.")
-            return("error")
+            i += 1
         if found == 1:
             lnLocal += 1
             if pb[i] == ',':
@@ -121,10 +119,6 @@ def parsExpression(pb):
         vrb = ''
         #conteneur de matrice
         mtc = []
-        #DEBUG/TEST
-        print("exp = ", exp)
-        print("found = ", found)
-        #DEBUG/TEST
         if utils.checkChr(pb[i], "-+*^%/[,;") == 0:
             if i == 0 and (pb[i] != '-' or pb[i] != '[' or pb[i] != '('):
                 print("L'expression ne peut commencer par une operation autre que '-'.")
@@ -203,6 +197,7 @@ def parsExpression(pb):
             exp.append(vrb)
     #DEBUG/TEST
     print("exp = ", exp)
+    #DEBUG/TEST
     return(exp)
         
 #parse la partie calcul
