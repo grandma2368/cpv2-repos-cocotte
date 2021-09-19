@@ -121,6 +121,10 @@ def parsExpression(pb):
         vrb = ''
         #conteneur de matrice
         mtc = []
+        #DEBUG/TEST
+        print("exp = ", exp)
+        print("found = ", found)
+        #DEBUG/TEST
         if utils.checkChr(pb[i], "-+*^%/[,;") == 0:
             if i == 0 and (pb[i] != '-' or pb[i] != '[' or pb[i] != '('):
                 print("L'expression ne peut commencer par une operation autre que '-'.")
@@ -141,8 +145,9 @@ def parsExpression(pb):
         #verifie les float
         pnt = 0
         #checke les valeurs numerales
-        if found == 1 and utils.checkChr(pb[i], "0123456789.") == 0:
+        if i < lenght and found > 0 and utils.checkChr(pb[i], "0123456789.") == 0:
             exp.append('*')
+            found = 0
         while i < lenght and utils.checkChr(pb[i], "0123456789.") == 0:
             if pb[i] == '.':
                 pnt += 1
@@ -152,19 +157,22 @@ def parsExpression(pb):
         if pnt > 1:
             print("Un nombre decimal ne peut contenir qu'un '.'.")
             return("error")
-        exp.append(vrb)
+        if found == 1:
+            exp.append(vrb)
         #index de depart de la prochaine boucle et checke de parenthese pour le cas d'une fonction
         j = i
         indexPrt = prt
+        vrb = ''
         #checke les variables et functions
-        if i < lenght and found == 1 and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
+        if i < lenght and found > 0 and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
             exp.append('*')
+            found = 0
         while i < lenght and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
             if pb[i] == '(' and i != j:
                 prt += 1
             elif pb[i] == ')' and i != j:
                 prt -= 1
-            found = 1
+            found = 2
             vrb = vrb + pb[i]
             i += 1
         if  prt != indexPrt:
@@ -179,7 +187,8 @@ def parsExpression(pb):
             else:
                 print("Toute fonction doit avoir sa variable definie entre deux parentheses, une '(' et une ')'.")
                 return("error")
-        exp.append(vrb)
+        if found == 2:
+            exp.append(vrb)
     #DEBUG/TEST
     print("exp = ", exp)
     return(exp)
