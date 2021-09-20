@@ -25,7 +25,6 @@ def replaceVariablesFunction(exp, data, vrb):
 #reduit au maximum un calcul avec variable
 def reduceCalc(calc):
     while len(calc) > 3:
-        vrb = ''
         #va chercher l'index des calculs selon leur ordre de priorite
         if utils.checkChr('*', calc) == 0:
             index = calc.index('*')
@@ -323,7 +322,14 @@ def reduceFunction(exp, data, name, vrb):
         return("error")
     if reduceFunctionExp(exp, 0) == "error":
         return("error")
-    #TROUVER UN MOYEN DE REDUIRE l'INTERIEUR DES PARENTHESES QUAND C'EST POSSIBLE MAIS NE PAS LES SUPPRIMER
+    i = 0
+    fnc = ''
+    lenght = len(exp)
+    while i < lenght:
+        fnc = fnc + exp[i]
+        i += 1
+    datum = [name, fnc]
+    data.append(datum)
 
 #checke le nom de la fonction et si la fonction a bien une variable
 def checkFunction(varName, varValue, data):
@@ -338,9 +344,6 @@ def checkFunction(varName, varValue, data):
             return("error")
         if reduceFunction(exp, data, varName, ukn[0]) == "error":
             return("error")
-        #VOIR SI ON GARDE L'ASSIGNATION DANS data ICI
-        datum = [varName, varValue]
-        data.append(datum)
     else:
         #il n'y a pas de variable dans la fonction
         print("Il n'y a pas de variable dans la fonction.")
