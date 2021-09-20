@@ -93,6 +93,7 @@ def parseMatrice(mtc, start, pb):
         ligne = parseLigneMatrice(i, pb, ln, lenght)
         if ligne == "error":
             return("error")
+        ln = len(ligne)
         mtc.append(ligne)
         while pb[i] != ']':
             i += 1
@@ -121,9 +122,10 @@ def parsExpression(pb):
         #conteneur de matrice
         mtc = []
         if utils.checkChr(pb[i], "-+*^%/[,;") == 0:
-            if i == 0 and (pb[i] != '-' or pb[i] != '[' or pb[i] != '('):
-                print("L'expression ne peut commencer par une operation autre que '-'.")
-                return("error")
+            if i == 0:
+                if utils.checkChr(pb[i],"-[(") == -1:
+                    print("L'expression ne peut commencer par une operation autre que '-'.")
+                    return("error")
             if pb[i] == '[':
                 #on entre dans la definition d'une matrice
                 i = parseMatrice(mtc, i, pb)
@@ -200,62 +202,6 @@ def parsExpression(pb):
     print("exp = ", exp)
     #DEBUG/TEST
     return(exp)
-        
-#parse la partie calcul
-# def parsExpression(pb):
-#     i = 0
-#     lenght = len(pb)
-#     #contient chaque partie de l'equation
-#     exp = []
-#     #verifie que toute parenthese ouverte est fermee plus tard
-#     prt = 0
-#     while i < lenght:
-#         #contient le nombre ou le nom de variable en train d'etre lu
-#         vrb = ''
-#         #conteneur de matrice
-#         mtc = []
-#         if i == 0 and pb[i] == '-' or i == 0 and pb[i] == '(':
-#             if pb[i] == '(':
-#                 prt += 1
-#             exp.append(pb[i])
-#             i += 1
-#         #verifie si une donnee a ete trouvee
-#         found = 0
-#         while i < lenght and utils.checkChr(pb[i], "0123456789") == 0:
-#             found = 1
-#             vrb = vrb + pb[i]
-#             i += 1
-#         if found == 1:
-#             exp.append(vrb)
-#         else:
-#             while i < lenght and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
-#                 found = 1
-#                 vrb = vrb + pb[i]
-#                 i += 1
-#             if found == 1:
-#                 exp.append(vrb)
-#         if found == 1 and i < lenght :
-#             if utils.checkChr(pb[i], "^%*+-/)") == 0:
-#                 exp.append(pb[i])
-#                 found = 0
-#             else:
-#                 #il n'y a pas de symbole de calcul entre deux nombres ou deux variables du coup on suppose une multiplication
-#                 exp.append('*')
-#                 if pb[i] != '(' and pb[i] != ')':
-#                     exp.append(pb[i])
-#         if i < lenght and pb[i] == '(':
-#             prt += 1
-#             exp.append(pb[i])
-#         if i < lenght and pb[i] == ')':
-#             prt -= 1
-#         if prt < 0:
-#             print("une parenthese fermante n'est pas accompagnee d'une ouvrante")
-#             return("error")
-#         i += 1
-#     if prt != 0:
-#         print("pb de parentheses")
-#         return("error")
-#     return(exp)
 
 #cherche si le probleme est correcte ou non
 def isItAProb(pb, data):
@@ -278,6 +224,7 @@ def isItAProb(pb, data):
         #VERIFIER S'IL Y A DES VARIABLES A REMPLACER PAR LEUR VALEUR DANS DATA
         #DEBUG/TEST
         print("calcul avec des lettres ou une matrice")
+        #DEBUG/TEST
         return("error")
     return
 
