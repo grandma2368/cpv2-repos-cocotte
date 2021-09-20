@@ -98,7 +98,7 @@ def parsExpression(pb):
             found = 2
             vrb = vrb + pb[i]
             i += 1
-        if  prt != indexPrt and found > 0:
+        if  prt != 0 and prt != indexPrt and found > 0:
             #gere le cas particulier ou la parenthese ouvrante se trouve a la fin sans qu il n y ait de * entre la variable et la parenthese
             if prt == indexPrt + 1 and pb[i - 1] == '(':
                 end = i - 1

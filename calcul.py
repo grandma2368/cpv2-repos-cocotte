@@ -32,6 +32,9 @@ def someCalcul(calc):
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
                 calc.pop(index)
+            else:
+                print("ERREUR taille tableau dans les calculs")
+                return("error")
         if utils.checkChr('/', calc) == 0:
             index = calc.index('/')
             res = divide(calc[index - 1], calc[index + 1])
@@ -39,6 +42,9 @@ def someCalcul(calc):
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
                 calc.pop(index)
+            else:
+                print("ERREUR taille tableau dans les calculs")
+                return("error")
         if utils.checkChr('%', calc) == 0:
             index = calc.index('%')
             res = modulo(calc[index - 1], calc[index + 1])
@@ -46,6 +52,9 @@ def someCalcul(calc):
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
                 calc.pop(index)
+            else:
+                print("ERREUR taille tableau dans les calculs")
+                return("error")
         if utils.checkChr('+', calc) == 0:
             index = calc.index('+')
             res = add(calc[index - 1], calc[index + 1])
@@ -53,11 +62,17 @@ def someCalcul(calc):
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
                 calc.pop(index)
+            else:
+                print("ERREUR taille tableau dans les calculs")
+                return("error")
         if utils.checkChr('-', calc) == 0:
             index = calc.index('-')
             if index + 1 <= len(calc):
                 calc[index + 1] = int(calc[index + 1]) * -1
                 calc[index] = '+'
+            else:
+                print("ERREUR taille tableau dans les calculs")
+                return("error")
     if len(calc) != 1:
         return("error")
 
