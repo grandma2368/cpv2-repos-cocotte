@@ -1,5 +1,7 @@
 import utils
 import calcul
+import matrice
+import function
 
 #checke s'il faut remplacer des valeurs dans data et les remplace par leur valeur
 def checkVar(exp, data, name):
@@ -17,94 +19,6 @@ def checkVar(exp, data, name):
     #calcule l'expression pour rentree le resultat dans data
     if calcul.calculate(exp, data, name) == "error":
         return("error")
-
-#verifie une ligne dans une matrice
-def parseLigneMatrice(i, pb, ln, lenght):
-    lnLocal = 0
-    found = 0
-    vrb = ''
-    ligne = []
-    while i < lenght:
-        vrb = ''
-        pnt = 0
-        while utils.checkChr(pb[i], "0123456789.") == 0:
-            if pb[i] == '.':
-                pnt += 1
-            vrb = vrb + pb[i]
-            found = 1
-            i += 1
-        if pnt > 1:
-            print("Un nombre decimal ne peut contenir qu'un '.'.")
-            return("error")
-        if found == 1:
-            lnLocal += 1
-            if pb[i] == ',':
-                found = 0
-                ligne.append(vrb)
-                i += 1
-            elif pb[i] == ']':
-                ligne.append(vrb)
-                i += 1
-                if ln == 0:
-                    ln = lnLocal
-                else:
-                    if lnLocal != ln:
-                        print("Les lignes de la matrice doivent toutes avoir le meme nombre de colonnes.")
-                        return("error")
-                return(ligne)
-            else:
-                print("Une matrice doit etre definie de la maniere suivante : [[a,b];[c,d]].")
-                return("error")
-        while utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
-            vrb = vrb + pb[i]
-            found = 1
-            i += 1
-        if found == 1:
-            lnLocal += 1
-            if pb[i] == ',':
-                ligne.append(vrb)
-                i += 1
-            elif pb[i] == ']':
-                ligne.append(vrb)
-                i += 1
-                if ln == 0:
-                    ln = lnLocal
-                else:
-                    if lnLocal != ln:
-                        print("Les lignes de la matrice doivent toutes avoir le meme nombre de colonnes.")
-                        return("error")
-                return(ligne)
-            else:
-                print("Une matrice doit etre definie de la maniere suivante : [[a,b];[c,d]].")
-                return("error")
-#gere les matrices, retourne l'indice de i pour reprendre le fil dans le parsing de l'expression
-def parseMatrice(mtc, start, pb):
-    if pb[start + 1] != '[':
-        print("Une matrice doit etre definie de la maniere suivante : [[a,b];[c,d]].")
-        return("error")
-    i = start + 1
-    lenght = len(pb)
-    #garde en memoire la taille d'une ligne
-    ln = 0
-    while i < lenght:
-        if pb[i] != '[':
-            return("error")
-        i += 1
-        ligne = parseLigneMatrice(i, pb, ln, lenght)
-        if ligne == "error":
-            return("error")
-        ln = len(ligne)
-        mtc.append(ligne)
-        while pb[i] != ']':
-            i += 1
-        i += 1
-        if pb[i] == ";":
-            i += 1
-        elif pb[i] == "]":
-            i += 1
-            return(i)
-        else:
-            return("error")
 
 #parse la partie calcul
 def parsExpression(pb):
@@ -128,7 +42,7 @@ def parsExpression(pb):
                     return("error")
             if pb[i] == '[':
                 #on entre dans la definition d'une matrice
-                i = parseMatrice(mtc, i, pb)
+                i = matrice.parseMatrice(mtc, i, pb)
                 if i == "error":
                     return("error")
                 exp.append(mtc)
@@ -208,45 +122,21 @@ def isItAProb(pb, data):
     pbm = pb.lower()
     for eachVar in data:
         if eachVar[0] == pbm:
+            #FAIRE L'AFFICHAGE PROPRE
             #renvoie la valeur de la donnnee trouvee
             print(eachVar[1])
             return
-    if utils.checkString(pbm, "1234567890+-/.*%^()") == 0:
+    if utils.checkString(pbm, "1234567890+-/.*%^()[];,qwertyuiopasdfghjklzxcvbnm") == 0:
         exp = parsExpression(pbm)
         if exp == "error":
             return("error")
+        #VERIFIER VERS QUEL CALCUL LE RENVOYER --> MATRICE OU NON / IMAGINAIRE OU NON
         if calcul.calculate(exp, data, 0) == "error":
             return("error")
     else:
-        #PEUT ETRE NOMBRE IMAGINAIRE
-        #PEUT ETRE MATRICE
-        #VERIFIER S'IL Y A UNE FONCTION DANS DATA
-        #VERIFIER S'IL Y A DES VARIABLES A REMPLACER PAR LEUR VALEUR DANS DATA
-        #DEBUG/TEST
-        print("calcul avec des lettres ou une matrice")
-        #DEBUG/TEST
+        print("Des caracteres ne sont pas propices au calcul.")
         return("error")
     return
-
-#checke le nom de la fonction et si la fonction a bien une variable
-def checkFunction(varName, varValue, data):
-    if varName[0] == "i" and varName[1] == "(":
-        print("Une fonction ne peut porter le nom de 'i' a cause des nombres imaginaires.")
-        return("error")
-    res = varName.split('(')
-    ukn = res[1].split(')')
-    if ukn[0] in varValue:
-        exp = parsExpression(varValue)
-        if exp == "error":
-            return("error")
-        if calcul.reduceFonction(exp, data, varName, ukn[0]) == "error":
-            return("error")
-        datum = [varName, varValue]
-        data.append(datum)
-    else:
-        #il n'y a pas de variable dans la fonction
-        print("Il n'y a pas de variable dans la fonction.")
-        return("error")
 
 #cree une nouvelle variable si les donnees sont correctes
 def newVarInData(varName, varValue, data):
@@ -264,13 +154,13 @@ def newVarInData(varName, varValue, data):
     #checke s'il s'agit d'une definition de fonction ou non
     if '(' in name:
         #checke si la fonction est correcte et assigne la fonction
-        if checkFunction(name, value, data) == "error":
+        if function.checkFunction(name, value, data) == "error":
             return("error")
         return
 
     #recherche si la variable est a calculer a partir d'autre ou non ou si matrice
     if utils.checkString(value, "1234567890+-/.*%^()[],;") == -1:
-        #RECHERCHER LES VARIABLES DANS DATA
+        #il s'agit de nombres imaginaires ou variables a aller chercher dans data
         if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == 0:
             exp = parsExpression(value)
             if exp == "error":
@@ -279,7 +169,6 @@ def newVarInData(varName, varValue, data):
                 return("error")
             else:
                 return
-        #RECHERCHER SI C EST UNE MATRICE
         else:
             print("Des caracteres ne sont pas propices au calcul.")
             return("error")
