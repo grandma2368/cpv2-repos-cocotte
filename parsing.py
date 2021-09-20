@@ -1,8 +1,6 @@
 import utils
 import calcul
 
-#T'ES EN TRAIN DE BOSSER SUR LES MATRICES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 #checke s'il faut remplacer des valeurs dans data et les remplace par leur valeur
 def checkVar(exp, data, name):
     for vrb in exp:
@@ -96,6 +94,9 @@ def parseMatrice(mtc, start, pb):
         if ligne == "error":
             return("error")
         mtc.append(ligne)
+        while pb[i] != ']':
+            i += 1
+        i += 1
         if pb[i] == ";":
             i += 1
         elif pb[i] == "]":
