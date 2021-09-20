@@ -112,9 +112,6 @@ def parsExpression(pb):
                 return("error")
         if found == 2:
             exp.append(vrb)
-    #DEBUG/TEST
-    print("exp = ", exp)
-    #DEBUG/TEST
     return(exp)
 
 #cherche si le probleme est correcte ou non

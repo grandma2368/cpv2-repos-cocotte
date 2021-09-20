@@ -1,6 +1,7 @@
 import fileinput
 import sys
 import parsing
+import show
 
 #RESTE A FAIRE
 #
@@ -21,7 +22,7 @@ for line in fileinput.input():
     if line.rstrip() == "exit":
         sys.exit()
     elif line.rstrip() == "data":
-        #AMELIORER L'AFFICHAGE DE DATA
-        print(data)
+        #affiche toutes les donnees de data
+        show.showAllData(data)
     else:
         parsing.parsing(line.rstrip(), data)
