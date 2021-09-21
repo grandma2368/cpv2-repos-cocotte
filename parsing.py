@@ -123,6 +123,16 @@ def isItAProb(pb, data):
             #renvoie la valeur de la donnnee trouvee
             show.showDatum(data, eachVar[0])
             return
+        elif utils.checkString(pbm, "qwertyuiopasdfghjklzxcvbnm0123456789[];,.()") == 0 and utils.checkString(eachVar[0], "qwertyuiopasdfghjklzxcvbnm()") == 0:
+            namePb = pbm.split('(')
+            nameFnc = eachVar[0].split('(')
+            if nameFnc[0] == namePb[0]:
+                vrb = namePb[1].split(')')
+                vrbFnc = nameFnc[1].split(')')
+                if function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data) == "error":
+                    return("error")
+                else:
+                    return
     if utils.checkString(pbm, "1234567890+-/.*%^()[];,qwertyuiopasdfghjklzxcvbnm") == 0:
         exp = parsExpression(pbm)
         if exp == "error":

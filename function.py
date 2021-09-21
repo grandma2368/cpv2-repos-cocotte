@@ -1,10 +1,34 @@
 import parsing
 import utils
 import calcul
+import show
 
-#T'ES EN TRAIN DE REVOIR LE PARSING ET LA REDUCTION DES EXPRESSIONS DE FONCTION
-#PENSE A CHECKER SI ON TE FILE UNE FONCTION DONT IL FAUT CALCULER L IMAGE OU NON 
-#ASSIGNE LA FONCTION DANS DATA APRES LE PARSING DED SA PARTIE CALCULATOIRE
+#calcule l'image d'une fonction existante
+def calculImage(fnc, fncVrb, vrb, data):
+    #si vrb est une variable, verifie dans data qu'elle existe
+    if utils.checkString(vrb, "1234567890[].,;i") == -1:
+        found = 0
+        for datum in data:
+            if datum[0] == vrb:
+                vrb = datum[1]
+                found = 1
+                break
+        if found == 0:
+            print("La variable'" + vrb + "' n'est pas encore enregistree dans data.")
+            return("error")
+    exp = parsing.parsExpression(fnc)
+    if exp == "error":
+        print("Une erreur est survenue lors du parsing.")
+        return("error")
+    i = 0
+    lenght = len(exp)
+    while i < lenght:
+        if exp[i] == fncVrb:
+            exp[i] = vrb
+        i += 1
+    if calcul.calculate(exp, data, 0) == "error":
+        print("Une erreur est surevnue lors du calcul.")
+        return("error")
 
 #checke et remplace les variables dans une fonction
 def replaceVariablesFunction(exp, data, vrb):
@@ -330,6 +354,7 @@ def reduceFunction(exp, data, name, vrb):
         i += 1
     datum = [name, fnc]
     data.append(datum)
+    show.showDatum(data, name)
 
 #checke le nom de la fonction et si la fonction a bien une variable
 def checkFunction(varName, varValue, data):
