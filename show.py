@@ -101,3 +101,5 @@ def showDatum(data, name):
                     fnd = 0
     if found == 0:
         print("La variable '" + name + "' n'a pas encore ete assignee.")
+    else:
+        print(exp)

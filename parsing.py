@@ -120,7 +120,6 @@ def isItAProb(pb, data):
     pbm = pb.lower()
     for eachVar in data:
         if eachVar[0] == pbm:
-            #FAIRE L'AFFICHAGE PROPRE
             #renvoie la valeur de la donnnee trouvee
             show.showDatum(data, eachVar[0])
             return
