@@ -4,7 +4,7 @@ import calcul
 import show
 
 #calcule l'image d'une fonction existante
-def calculImage(fnc, fncVrb, vrb, data):
+def calculImage(fnc, fncVrb, vrb, data, name):
     #si vrb est une variable, verifie dans data qu'elle existe
     if utils.checkString(vrb, "1234567890[].,;i") == -1:
         found = 0
@@ -26,7 +26,7 @@ def calculImage(fnc, fncVrb, vrb, data):
         if exp[i] == fncVrb:
             exp[i] = vrb
         i += 1
-    if calcul.calculate(exp, data, 0) == "error":
+    if calcul.calculate(exp, data, name) == "error":
         print("Une erreur est surevnue lors du calcul.")
         return("error")
 

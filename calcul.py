@@ -1,4 +1,5 @@
 import utils
+import show
 
 #multiplie deux nombres
 def multiply(a, b):
@@ -130,9 +131,11 @@ def calculate(exp, data, name):
         if eachVar[0] == name:
             eachVar[1] = exp[0]
             reassigned = 1
+            show.showDatum(data, name)
     if reassigned == 0:
         datum = [name, exp[0]]
         data.append(datum)
+        show.showDatum(data, name)
 
 #checke et remplace les variables par leur valeur dans data
 def replaceVariables(exp, data):

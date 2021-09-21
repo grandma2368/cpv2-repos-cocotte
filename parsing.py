@@ -129,7 +129,7 @@ def isItAProb(pb, data):
             if nameFnc[0] == namePb[0]:
                 vrb = namePb[1].split(')')
                 vrbFnc = nameFnc[1].split(')')
-                if function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data) == "error":
+                if function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data, 0) == "error":
                     return("error")
                 else:
                     return
@@ -166,25 +166,37 @@ def newVarInData(varName, varValue, data):
         return
 
     #recherche si la variable est a calculer a partir d'autre ou non ou si matrice
-    if utils.checkString(value, "1234567890+-/.*%^()[],;") == -1:
-        #il s'agit de nombres imaginaires ou variables a aller chercher dans data
-        if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == 0:
-            exp = parsExpression(value)
-            if exp == "error":
-                return("error")
-            if calcul.calculateWithVariables(exp, data, name) == "error":
-                return("error")
-            else:
-                return
-        else:
-            print("Des caracteres ne sont pas propices au calcul.")
+    if utils.checkString(value, "1234567890+-/.*%^()[],;") == 0:
+        #enregistre la variable dans data
+        exp = parsExpression(value)
+        if exp == "error":
             return("error")
-    
-    #enregistre la variable dans data
-    exp = parsExpression(value)
-    if exp == "error":
-        return("error")
-    if calcul.calculate(exp, data, name) == "error":
+        if calcul.calculate(exp, data, name) == "error":
+            return("error")
+        else:
+            return
+    for eachVar in data:
+        if utils.checkString(value, "qwertyuiopasdfghjklzxcvbnm0123456789[];,.()") == 0 and utils.checkString(eachVar[0], "qwertyuiopasdfghjklzxcvbnm()") == 0:
+                namePb = value.split('(')
+                nameFnc = eachVar[0].split('(')
+                if nameFnc[0] == namePb[0]:
+                    vrb = namePb[1].split(')')
+                    vrbFnc = nameFnc[1].split(')')
+                    if function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data, name) == "error":
+                        return("error")
+                    else:
+                        return
+    #il s'agit de nombres imaginaires ou variables a aller chercher dans data
+    if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == 0:
+        exp = parsExpression(value)
+        if exp == "error":
+            return("error")
+        if calcul.calculateWithVariables(exp, data, name) == "error":
+            return("error")
+        else:
+            return
+    else:
+        print("Des caracteres ne sont pas propices au calcul.")
         return("error")
     
 #fonction d'entree dans le parsing
