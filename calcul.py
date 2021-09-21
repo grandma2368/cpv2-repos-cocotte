@@ -3,7 +3,7 @@ import show
 
 #puissance
 def power(a, b):
-    c = float(a) ^ float(b)
+    c = pow(int(a),int(b))
     return(c)
 
 #multiplie deux nombres
