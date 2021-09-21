@@ -1,6 +1,11 @@
 import utils
 import show
 
+#puissance
+def power(a, b):
+    c = float(a) ^ float(b)
+    return(c)
+
 #multiplie deux nombres
 def multiply(a, b):
     c = float(a) * float(b)
@@ -29,6 +34,16 @@ def someCalcul(calc):
         if utils.checkChr('*', calc) == 0:
             index = calc.index('*')
             res = multiply(calc[index - 1], calc[index + 1])
+            calc[index - 1] = res
+            if index + 1 <= len(calc):
+                calc.pop(index + 1)
+                calc.pop(index)
+            else:
+                print("ERREUR taille tableau dans les calculs")
+                return("error")
+        if utils.checkChr('^', calc) == 0:
+            index = calc.index('^')
+            res = power(calc[index - 1], calc[index + 1])
             calc[index - 1] = res
             if index + 1 <= len(calc):
                 calc.pop(index + 1)

@@ -77,6 +77,33 @@ def reduceCalc(calc):
                 else:
                     print("ERREUR taille tableau dans les calculs")
                     return("error")
+        if utils.checkChr('^', calc) == 0:
+            index = calc.index('^')
+            if utils.checkString(calc[index - 1], "0123456789.") == 0 and utils.checkString(calc[index + 1], "0123456789.") == 0:
+                res = calcul.power(calc[index - 1], calc[index + 1])
+                calc[index - 1] = res
+                if index + 1 <= len(calc):
+                    calc.pop(index + 1)
+                    calc.pop(index)
+                else:
+                    print("ERREUR taille tableau dans les calculs")
+                    return("error")
+            elif utils.checkString(calc[index - 1], "qwertyuiopasdfghjklzxcvbnm") == 0 and utils.checkString(calc[index + 1], "0123456789.") == 0:
+                calc[index - 1] = calc[index + 1] + calc[index] + calc[index - 1]
+                if index + 1 <= len(calc):
+                    calc.pop(index + 1)
+                    calc.pop(index)
+                else:
+                    print("ERREUR taille tableau dans les calculs")
+                    return("error")
+            else:
+                calc[index - 1] = calc[index - 1] + calc[index] + calc[index + 1]
+                if index + 1 <= len(calc):
+                    calc.pop(index + 1)
+                    calc.pop(index)
+                else:
+                    print("ERREUR taille tableau dans les calculs")
+                    return("error")
         if utils.checkChr('/', calc) == 0:
             index = calc.index('/')
             if utils.checkString(calc[index - 1], "0123456789.") == 0 and utils.checkString(calc[index + 1], "0123456789.") == 0:
