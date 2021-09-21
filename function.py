@@ -3,8 +3,6 @@ import utils
 import calcul
 import show
 
-#PAS BESOIN DE REDUIRE L EXPRESSION DE LA FONCTION
-
 #calcule l'image d'une fonction existante
 def calculImage(fnc, fncVrb, vrb, data, name):
     #si vrb est une variable, verifie dans data qu'elle existe
