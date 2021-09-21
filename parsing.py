@@ -2,6 +2,7 @@ import utils
 import calcul
 import matrice
 import function
+import show
 
 #checke s'il faut remplacer des valeurs dans data et les remplace par leur valeur
 def checkVar(exp, data, name):
@@ -14,7 +15,7 @@ def checkVar(exp, data, name):
                     vrb = datum[1]
                     found = 1
             if found == 0:
-                print("la variable ", vrb ," n'existe pas encore dans data")
+                print("la variable '" + vrb + "' n'existe pas encore dans data")
                 return("error")
     #calcule l'expression pour rentree le resultat dans data
     if calcul.calculate(exp, data, name) == "error":
@@ -121,7 +122,7 @@ def isItAProb(pb, data):
         if eachVar[0] == pbm:
             #FAIRE L'AFFICHAGE PROPRE
             #renvoie la valeur de la donnnee trouvee
-            print(eachVar[1])
+            show.showDatum(data, eachVar[0])
             return
     if utils.checkString(pbm, "1234567890+-/.*%^()[];,qwertyuiopasdfghjklzxcvbnm") == 0:
         exp = parsExpression(pbm)

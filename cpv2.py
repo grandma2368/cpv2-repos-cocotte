@@ -3,15 +3,6 @@ import sys
 import parsing
 import show
 
-#RESTE A FAIRE
-#
-#
-#GERER LES MATRICES
-#GERER LES FONCTIONS
-#GERER LES POLYNOMES
-#GERER LES IMAGINAIRES
-#GERER LES FLOAT
-
 #entree du programme
 
 #initialisation de data qui contiendra toutes les variables pdt le temps d execution du programme
