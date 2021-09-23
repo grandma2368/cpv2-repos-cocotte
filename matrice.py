@@ -18,6 +18,7 @@ def checkMatriceSize(a, b):
 
 #addition matricielle
 def addMatrice(a, b):
+    c = []
     nbMat = 0
     if utils.checkString(a, "[]0123456789,;-") == 0:
         nbMat += 1
@@ -27,64 +28,117 @@ def addMatrice(a, b):
         size = checkMatriceSize(a, b)
         if size == "error":
             return("error")
-        #TRAITER LE CAS OU LES DEUX PARTIS SONT DES MATRICES
-    return("error")
+        i = 0
+        while i < size[0]:
+            lnA = a[i]
+            lnB = b[i]
+            j = 0
+            lnC = []
+            while j < size[1]:
+                vrbC = float(lnA[j]) + float(lnB[j])
+                lnC.append(vrbC)
+                j += 1
+            c.append(lnC)
+            i += 1
+        #DEBUG/TEST
+        print("c = ", c)
+        #DEBUG/TEST
+        return(c)
+    else:
+        #les deux membres du calcul ne sont pas des matrices
+        return("calcul")
 
 #multiplication matricielle
 def multiplyMatrice(a, b):
+    c = []
     nbMat = 0
     if utils.checkString(a, "[]0123456789,;-") == 0:
         nbMat += 1
     if utils.checkString(b, "[]0123456789,;-") == 0:
-        nbMat += 1
+        nbMat += 2
     if nbMat == 2:
-        size = checkMatriceSize(a, b)
-        if size == "error":
-            return("error")
-        #TRAITER LE CAS OU LES DEUX PARTIS SONT DES MATRICES
-    return("error")
-
-#puissance matricielle
-def powerMatrice(a, b):
-    nbMat = 0
-    if utils.checkString(a, "[]0123456789,;-") == 0:
-        nbMat += 1
-    if utils.checkString(b, "[]0123456789,;-") == 0:
-        nbMat += 1
-    if nbMat == 2:
-        size = checkMatriceSize(a, b)
-        if size == "error":
-            return("error")
-        #TRAITER LE CAS OU LES DEUX PARTIS SONT DES MATRICES
-    return("error")
+        nbCol = len(b[0])
+        nbLn = len(b)
+        i = 0
+        while i < nbLn:
+            lnC = []
+            j = 0
+            lnB = b[i]
+            while j < nbCol:
+                vrbC = float(a) * float(lnB[j])
+                lnC.append(vrbC)
+                j += 1
+            c.append(lnC)
+            i += 1
+        return(c)
+    elif nbMat == 1:
+        nbCol = len(a[0])
+        nbLn = len(a)
+        i = 0
+        while i < nbLn:
+            lnC = []
+            j = 0
+            lnA = a[i]
+            while j < nbCol:
+                vrbC = float(b) * float(lnA[j])
+                lnC.append(vrbC)
+                j += 1
+            c.append(lnC)
+            i += 1
+        return(c)
+    else:
+        print("La multiplication entre matrice releve du calcul vectoriel qui est un bonus, il en va de meme pour la division.")
+        return("error")
 
 #division matricielle
 def divideMatrice(a, b):
+    c = []
     nbMat = 0
     if utils.checkString(a, "[]0123456789,;-") == 0:
         nbMat += 1
     if utils.checkString(b, "[]0123456789,;-") == 0:
-        nbMat += 1
+        nbMat += 2
     if nbMat == 2:
-        size = checkMatriceSize(a, b)
-        if size == "error":
+        if float(a) != 0:
+            print("Une division par 0 est impossible")
             return("error")
-        #TRAITER LE CAS OU LES DEUX PARTIS SONT DES MATRICES
-    return("error")
-
-#modulo matricielle
-def moduloMatrice(a, b):
-    nbMat = 0
-    if utils.checkString(a, "[]0123456789,;-") == 0:
-        nbMat += 1
-    if utils.checkString(b, "[]0123456789,;-") == 0:
-        nbMat += 1
-    if nbMat == 2:
-        size = checkMatriceSize(a, b)
-        if size == "error":
+        a = 1 / float(a)
+        nbCol = len(b[0])
+        nbLn = len(b)
+        i = 0
+        while i < nbLn:
+            lnC = []
+            j = 0
+            lnB = b[i]
+            while j < nbCol:
+                vrbC = float(a) * float(lnB[j])
+                lnC.append(vrbC)
+                j += 1
+            c.append(lnC)
+            i += 1
+        return(c)
+    elif nbMat == 1:
+        if float(b) != 0:
+            print("Une division par 0 est impossible")
             return("error")
-        #TRAITER LE CAS OU LES DEUX PARTIS SONT DES MATRICES
-    return("error")
+        b = 1 / float(b)
+        nbCol = len(a[0])
+        nbLn = len(a)
+        i = 0
+        while i < nbLn:
+            lnC = []
+            j = 0
+            lnA = a[i]
+            while j < nbCol:
+                vrbC = float(b) * float(lnA[j])
+                lnC.append(vrbC)
+                j += 1
+            c.append(lnC)
+            i += 1
+        return(c)
+    else:
+        print("La division entre matrice releve du calcul vectoriel qui est un bonus, il en va de meme pour la multiplication.")
+        return("error")
 
 #gere les matrices, retourne l'indice de i pour reprendre le fil dans le parsing de l'expression
 def parseMatrice(mtc, start, pb):
