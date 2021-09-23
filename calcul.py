@@ -3,6 +3,9 @@ import show
 
 #puissance
 def power(a, b):
+    if b < 0:
+        print("Ne gere pas les puissances negatives.")
+        return("error")
     c = pow(int(a),int(b))
     return(c)
 
@@ -13,11 +16,17 @@ def multiply(a, b):
 
 #divise deux nombres
 def divide(a, b):
+    if b == 0:
+        print("Une division par 0 ne peut etre calcule.")
+        return("error")
     c = float(a) / float(b)
     return(c)
 
 #modulo deux nombres
 def modulo(a, b):
+    if b == 0:
+        print("Un modulo par 0 ne peut etre calcule.")
+        return("error")
     c = float(a) % float(b)
     return(c)
 
@@ -44,6 +53,8 @@ def someCalcul(calc):
         if utils.checkChr('^', calc) == 0:
             index = calc.index('^')
             res = power(calc[index - 1], calc[index + 1])
+            if res == "error":
+                return("error")
             calc[index - 1] = res
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
@@ -54,6 +65,8 @@ def someCalcul(calc):
         if utils.checkChr('/', calc) == 0:
             index = calc.index('/')
             res = divide(calc[index - 1], calc[index + 1])
+            if res == "error":
+                return("error")
             calc[index - 1] = res
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
@@ -64,6 +77,8 @@ def someCalcul(calc):
         if utils.checkChr('%', calc) == 0:
             index = calc.index('%')
             res = modulo(calc[index - 1], calc[index + 1])
+            if res == "error":
+                return("error")
             calc[index - 1] = res
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
@@ -91,6 +106,7 @@ def someCalcul(calc):
                 return("error")
     if len(calc) != 1:
         return("error")
+    return(calc)
 
 #recupere le calcul prioritaire a faire
 def calcParenthesis(start, end, exp):
@@ -100,7 +116,8 @@ def calcParenthesis(start, end, exp):
         calc.append(exp[i])
         i += 1
     #calcule ce qui se trouve dans la portion entre parentheses
-    if someCalcul(calc) == "error":
+    res = someCalcul(calc)
+    if res == "error":
         return("error")
     #remplace le calcul entre parentheses par sa valeur
     i = end
@@ -136,41 +153,62 @@ def calculate(exp, data, name):
     #calcule ce qui reste dans exp a la fin
     if someCalcul(exp) == "error":
         return("error")
-    #check si c'est un calcul ou variable a assigner
-    if name == 0:
-        print(exp[0])
-        return
-    #check pour reassigner ou non une variable
-    reassigned = 0
-    for eachVar in data:
-        if eachVar[0] == name:
-            eachVar[1] = exp[0]
-            reassigned = 1
-            show.showDatum(data, name)
-    if reassigned == 0:
-        datum = [name, exp[0]]
-        data.append(datum)
-        show.showDatum(data, name)
+    return(exp[0])
+    # #check si c'est un calcul ou variable a assigner
+    # if name == 0:
+    #     print(exp[0])
+    #     return
+    # #check pour reassigner ou non une variable
+    # reassigned = 0
+    # for eachVar in data:
+    #     if eachVar[0] == name:
+    #         eachVar[1] = exp[0]
+    #         reassigned = 1
+    #         show.showDatum(data, name)
+    # if reassigned == 0:
+    #     datum = [name, exp[0]]
+    #     data.append(datum)
+    #     show.showDatum(data, name)
 
 #checke et remplace les variables par leur valeur dans data
 def replaceVariables(exp, data):
     i = 0
     lenght = len(exp)
     while i < lenght:
-        if utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
+        if utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
             found = 0
-            for el in data:
-                if el[0] == exp[i]:
-                    exp[i] = el[1]
-                    found = 1
-            if found == 0:
-                print("Une variable de l'expression n'est pas enregistree dans data.")
-                return("error")
+            if '(' in exp[i]:
+                for eachVar in data:
+                    namePb = exp[i].split('(')
+                    if utils.checkString(eachVar[0], "qwertyuiopasdfghjklzxcvbnm()") == 0:
+                        nameFnc = eachVar[0].split('(')
+                        if nameFnc[0] == namePb[0]:
+                            found = 1
+                            vrb = namePb[1].split(')')
+                            vrbFnc = nameFnc[1].split(')')
+                            res = function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data, 0)
+                            if res == "error":
+                                return("error")
+                            else:
+                                exp[i] = res
+                    if found == 0:
+                        print("Une variable de l'expression n'est pas enregistree dans data.")
+                        return("error")
+            else:
+                for el in data:
+                    if el[0] == exp[i]:
+                        exp[i] = el[1]
+                        found = 1
+                if found == 0:
+                    print("Une variable de l'expression n'est pas enregistree dans data.")
+                    return("error")
         i += 1
 
 #checke les variables et les remplace si elles sont dans data puis resoud/reduit le calcul
 def calculateWithVariables(exp, data, name):
     if replaceVariables(exp, data) == "error":
         return("error")
-    if calculate(exp, data, name) == "error":
+    res = calculate(exp, data, name)
+    if res == "error":
         return("error")
+    return(res)

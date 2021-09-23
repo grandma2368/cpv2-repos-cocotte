@@ -150,19 +150,34 @@ def newVarInData(varName, varValue, data):
     value = varValue.lower()
     name = varName.lower()
 
+    #verifie qu'il n'y a pas d'assignation a i
+    if len(name) == 1 and name[0] == 'i':
+        print("Une variable ne peut etre nommee 'i' en raison des nombres imaginaires.")
+        return("error")
+
+    #pb a resoudre
+    if len(value) > 1 and '?' in value:
+        if value[len(value) - 1] != '?':
+            print("Le probleme doit se terminer par un '?', rien ne doit se trouver apres.")
+            return("error")
+        #REMPLACER TOUTES LES VARIABLES ET RESOUDRE L'EQUATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        return
+
+    #assignation a faire
+
     #recherche si le nom de variable ne contient que des lettres ou non
     if utils.checkString(name, "azertyuiopqsdfghjklmwxcvbn()") == -1:
         print("Le nom de la fonction ou de la variable est invalide.")
-        return("error")
-    if len(name) == 1 and name[0] == 'i':
-        print("Une variable ne peut etre nommee 'i' en raison des nombres imaginaires.")
         return("error")
 
     #checke s'il s'agit d'une definition de fonction ou non
     if '(' in name:
         #checke si la fonction est correcte et assigne la fonction
-        if function.checkFunction(name, value, data) == "error":
+        res = function.checkFunction(name, value, data)
+        if res == "error":
             return("error")
+        data.append(res)
+        show.showDatum(data, name)
         return
 
     #recherche si la variable est a calculer a partir d'autre ou non ou si matrice
@@ -171,30 +186,26 @@ def newVarInData(varName, varValue, data):
         exp = parsExpression(value)
         if exp == "error":
             return("error")
-        if calcul.calculate(exp, data, name) == "error":
+        res = calcul.calculate(exp, data, name)
+        if res == "error":
             return("error")
-        else:
-            return
-    for eachVar in data:
-        if utils.checkString(value, "qwertyuiopasdfghjklzxcvbnm0123456789[];,.()") == 0 and utils.checkString(eachVar[0], "qwertyuiopasdfghjklzxcvbnm()") == 0:
-                namePb = value.split('(')
-                nameFnc = eachVar[0].split('(')
-                if nameFnc[0] == namePb[0]:
-                    vrb = namePb[1].split(')')
-                    vrbFnc = nameFnc[1].split(')')
-                    if function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data, name) == "error":
-                        return("error")
-                    else:
-                        return
+        datum = [name, res]
+        data.append(datum)
+        show.showDatum(data, name)
+        return
+
     #il s'agit de nombres imaginaires ou variables a aller chercher dans data
     if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == 0:
         exp = parsExpression(value)
         if exp == "error":
             return("error")
-        if calcul.calculateWithVariables(exp, data, name) == "error":
+        res = calcul.calculateWithVariables(exp, data, name)
+        if res == "error":
             return("error")
-        else:
-            return
+        datum = [name, res]
+        data.append(datum)
+        show.showDatum(data, name)
+        return
     else:
         print("Des caracteres ne sont pas propices au calcul.")
         return("error")

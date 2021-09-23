@@ -1,7 +1,6 @@
 import parsing
 import utils
 import calcul
-import show
 
 #calcule l'image d'une fonction existante
 def calculImage(fnc, fncVrb, vrb, data, name):
@@ -26,9 +25,11 @@ def calculImage(fnc, fncVrb, vrb, data, name):
         if exp[i] == fncVrb:
             exp[i] = vrb
         i += 1
-    if calcul.calculate(exp, data, name) == "error":
+    res = calcul.calculate(exp, data, name)
+    if res == "error":
         print("Une erreur est surevnue lors du calcul.")
         return("error")
+    return(res)
 
 #checke et remplace les variables dans une fonction
 def replaceVariablesFunction(exp, data, vrb):
@@ -57,8 +58,7 @@ def reduceFunction(exp, data, name, vrb):
         fnc = fnc + exp[i]
         i += 1
     datum = [name, fnc]
-    data.append(datum)
-    show.showDatum(data, name)
+    return(datum)
 
 #checke le nom de la fonction et si la fonction a bien une variable
 def checkFunction(varName, varValue, data):
@@ -71,8 +71,10 @@ def checkFunction(varName, varValue, data):
         exp = parsing.parsExpression(varValue)
         if exp == "error":
             return("error")
-        if reduceFunction(exp, data, varName, ukn[0]) == "error":
+        res = reduceFunction(exp, data, varName, ukn[0])
+        if res == "error":
             return("error")
+        return(res)
     else:
         #il n'y a pas de variable dans la fonction
         print("Il n'y a pas de variable dans la fonction.")
