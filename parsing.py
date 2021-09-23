@@ -129,17 +129,20 @@ def isItAProb(pb, data):
             if nameFnc[0] == namePb[0]:
                 vrb = namePb[1].split(')')
                 vrbFnc = nameFnc[1].split(')')
-                if function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data, 0) == "error":
+                res = function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data, 0)
+                if res == "error":
                     return("error")
-                else:
-                    return
+                print(res)
+                return
     if utils.checkString(pbm, "1234567890+-/.*%^()[];,qwertyuiopasdfghjklzxcvbnm") == 0:
         exp = parsExpression(pbm)
         if exp == "error":
             return("error")
         #VERIFIER VERS QUEL CALCUL LE RENVOYER --> MATRICE OU NON / IMAGINAIRE OU NON
-        if calcul.calculate(exp, data, 0) == "error":
+        res = calcul.calculate(exp, data, 0)
+        if res == "error":
             return("error")
+        print(res)
     else:
         print("Des caracteres ne sont pas propices au calcul.")
         return("error")
