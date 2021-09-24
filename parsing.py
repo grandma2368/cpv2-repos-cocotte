@@ -139,7 +139,7 @@ def isItAProb(pb, data):
         if exp == "error":
             return("error")
         #VERIFIER VERS QUEL CALCUL LE RENVOYER --> MATRICE OU NON / IMAGINAIRE OU NON
-        res = calcul.calculate(exp, data, 0)
+        res = calcul.calculateWithVariables(exp, data, 0)
         if res == "error":
             return("error")
         print(res)
@@ -215,17 +215,21 @@ def newVarInData(varName, varValue, data):
     
 #fonction d'entree dans le parsing
 def parsing(line, data):
-    res = line.split("=")
-    if len(res) == 1:
-        #verifie s'il s'agit d'une variable a donner ou d'un calcul a resoudre
-        if isItAProb(line.replace(" ", ""), data) == "error":
-            return("error")
-    else:
-        #verifie s'il s'agit d'une variable a donner ou d'un calcul a resoudre
-        if res[1].replace(" ", "") == "?":
-            if isItAProb(res[0].replace(" ", ""), data) == "error":
+    if utils.checkString(line.lower(), "1234567890-+=)(*^%qwertyuiop[]asdfghjkl;zxcvbnm,.?/") == 0:
+        res = line.split("=")
+        if len(res) == 1:
+            #verifie s'il s'agit d'une variable a donner ou d'un calcul a resoudre
+            if isItAProb(line.replace(" ", ""), data) == "error":
                 return("error")
         else:
-            #ammorce les checks avant enregistrement de la variable
-            if newVarInData(res[0].replace(" ", ""), res[1].replace(" ", ""), data) == "error":
-                return("error")
+            #verifie s'il s'agit d'une variable a donner ou d'un calcul a resoudre
+            if res[1].replace(" ", "") == "?":
+                if isItAProb(res[0].replace(" ", ""), data) == "error":
+                    return("error")
+            else:
+                #ammorce les checks avant enregistrement de la variable
+                if newVarInData(res[0].replace(" ", ""), res[1].replace(" ", ""), data) == "error":
+                    return("error")
+    else:
+        print("Veuillez entrer une expression mathematique valide.")
+        return("error")

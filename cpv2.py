@@ -15,5 +15,7 @@ for line in fileinput.input():
     elif line.rstrip() == "data":
         #affiche toutes les donnees de data
         show.showAllData(data)
+    elif line.rstrip() == '':
+        print("Veuillez entrer une expression mathematique valide.")
     else:
         parsing.parsing(line.rstrip(), data)
