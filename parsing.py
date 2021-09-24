@@ -80,11 +80,7 @@ def parsExpression(pb):
             exp.append('*')
             found = 0
         while i < lenght and utils.checkChr(pb[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
-            if pb[i] == '(' and i != j:
-                prt += 1
-            elif pb[i] == ')' and i != j:
-                prt -= 1
-            elif pb[i] == '(' and i == j:
+            if pb[i] == '(' and i == j:
                 prt += 1
                 exp.append(pb[i])
                 found = 0
@@ -96,21 +92,15 @@ def parsExpression(pb):
                 found = 0
                 i += 1
                 break
-            found = 2
-            vrb = vrb + pb[i]
-            i += 1
-        if  prt != 0 and prt != indexPrt and found > 0:
-            #gere le cas particulier ou la parenthese ouvrante se trouve a la fin sans qu il n y ait de * entre la variable et la parenthese
-            if prt == indexPrt + 1 and pb[i - 1] == '(':
-                end = i - 1
-                i = j
-                vrb = ''
-                while i < end:
+            else:
+                found = 2
+                if pb[i] == '(':
+                    while pb[i] != ')':
+                        vrb = vrb + pb[i]
+                        i += 1
+                else :
                     vrb = vrb + pb[i]
                     i += 1
-            else:
-                print("Toute fonction doit avoir sa variable definie entre deux parentheses, une '(' et une ')'.")
-                return("error")
         if found == 2:
             exp.append(vrb)
     return(exp)

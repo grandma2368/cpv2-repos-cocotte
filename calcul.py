@@ -224,6 +224,10 @@ def calculateWithVariables(exp, data, name):
     #DEBUG/TEST
     if replaceVariables(exp, data) == "error":
         return("error")
+    #DEBUG/TEST
+    print("exp apres traitement de calcul")
+    print("exp = ", exp)
+    #DEBUG/TEST
     res = calculate(exp, data, name)
     if res == "error":
         return("error")
