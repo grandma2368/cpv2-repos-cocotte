@@ -187,11 +187,19 @@ def replaceVariables(exp, data):
                             vrb = namePb[1].split(')')
                             vrbFnc = nameFnc[1].split(')')
                             res = function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data, 0)
+                            #DEBUG/TEST
+                            print("retour de calcul image")
+                            print("res= ", res)
+                            #DEBUG/TEST
                             if res == "error":
                                 return("error")
                             else:
                                 exp[i] = res
                     if found == 0:
+                        #DEBUG/TEST
+                        print("premier retour")
+                        print("exp = ", exp)
+                        #DEBUG/TEST
                         print("Une variable de l'expression n'est pas enregistree dans data.")
                         return("error")
             else:
@@ -200,12 +208,20 @@ def replaceVariables(exp, data):
                         exp[i] = el[1]
                         found = 1
                 if found == 0:
+                    #DEBUG/TEST
+                    print("deuxieme retour")
+                    print("exp = ", exp)
+                    #DEBUG/TEST
                     print("Une variable de l'expression n'est pas enregistree dans data.")
                     return("error")
         i += 1
 
 #checke les variables et les remplace si elles sont dans data puis resoud/reduit le calcul
 def calculateWithVariables(exp, data, name):
+    #DEBUG/TEST
+    print("exp a l arrivee avant traitement de calcul")
+    print("exp = ", exp)
+    #DEBUG/TEST
     if replaceVariables(exp, data) == "error":
         return("error")
     res = calculate(exp, data, name)

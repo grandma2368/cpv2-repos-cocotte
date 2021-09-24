@@ -215,7 +215,7 @@ def newVarInData(varName, varValue, data):
     
 #fonction d'entree dans le parsing
 def parsing(line, data):
-    if utils.checkString(line.lower(), "1234567890-+=)(*^%qwertyuiop[]asdfghjkl;zxcvbnm,.?/") == 0:
+    if utils.checkString(line.replace(" ", "").lower(), "1234567890-+=)(*^%qwertyuiop[]asdfghjkl;zxcvbnm,.?/") == 0:
         res = line.split("=")
         if len(res) == 1:
             #verifie s'il s'agit d'une variable a donner ou d'un calcul a resoudre
