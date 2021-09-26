@@ -1,5 +1,5 @@
 import utils
-import show
+import function
 
 #puissance
 def power(a, b):
@@ -175,7 +175,15 @@ def replaceVariables(exp, data):
     i = 0
     lenght = len(exp)
     while i < lenght:
-        if utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm()") == 0:
+        if utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
+                for el in data:
+                    if el[0] == exp[i]:
+                        exp[i] = el[1]
+                        found = 1
+                if found == 0:
+                    print("Une variable de l'expression n'est pas enregistree dans data.")
+                    return("error")
+        elif utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm(0123456789.)") == 0:
             found = 0
             if '(' in exp[i]:
                 for eachVar in data:
@@ -187,47 +195,19 @@ def replaceVariables(exp, data):
                             vrb = namePb[1].split(')')
                             vrbFnc = nameFnc[1].split(')')
                             res = function.calculImage(eachVar[1], vrbFnc[0], vrb[0], data, 0)
-                            #DEBUG/TEST
-                            print("retour de calcul image")
-                            print("res= ", res)
-                            #DEBUG/TEST
                             if res == "error":
                                 return("error")
                             else:
                                 exp[i] = res
                     if found == 0:
-                        #DEBUG/TEST
-                        print("premier retour")
-                        print("exp = ", exp)
-                        #DEBUG/TEST
                         print("Une variable de l'expression n'est pas enregistree dans data.")
                         return("error")
-            else:
-                for el in data:
-                    if el[0] == exp[i]:
-                        exp[i] = el[1]
-                        found = 1
-                if found == 0:
-                    #DEBUG/TEST
-                    print("deuxieme retour")
-                    print("exp = ", exp)
-                    #DEBUG/TEST
-                    print("Une variable de l'expression n'est pas enregistree dans data.")
-                    return("error")
         i += 1
 
 #checke les variables et les remplace si elles sont dans data puis resoud/reduit le calcul
 def calculateWithVariables(exp, data, name):
-    #DEBUG/TEST
-    print("exp a l arrivee avant traitement de calcul")
-    print("exp = ", exp)
-    #DEBUG/TEST
     if replaceVariables(exp, data) == "error":
         return("error")
-    #DEBUG/TEST
-    print("exp apres traitement de calcul")
-    print("exp = ", exp)
-    #DEBUG/TEST
     res = calculate(exp, data, name)
     if res == "error":
         return("error")
