@@ -197,7 +197,7 @@ def replaceVariables(exp, data):
                     if el[0] == exp[i]:
                         exp[i] = el[1]
                         found = 1
-                if found == 0:
+                if found == 0 and exp[i] != 'i':
                     print("Une variable de l'expression n'est pas enregistree dans data.")
                     return("error")
         elif utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm(0123456789.)") == 0:
@@ -216,7 +216,7 @@ def replaceVariables(exp, data):
                                 return("error")
                             else:
                                 exp[i] = res
-                    if found == 0:
+                    if found == 0 and exp[i] != 'i':
                         print("Une variable de l'expression n'est pas enregistree dans data.")
                         return("error")
         i += 1
