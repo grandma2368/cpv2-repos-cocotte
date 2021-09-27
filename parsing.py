@@ -136,7 +136,6 @@ def isItAProb(pb, data):
         exp = parsExpression(pbm)
         if exp == "error":
             return("error")
-        #VERIFIER VERS QUEL CALCUL LE RENVOYER --> MATRICE OU NON / IMAGINAIRE OU NON
         res = calcul.calculateWithVariables(exp, data, 0)
         if res == "error":
             return("error")
