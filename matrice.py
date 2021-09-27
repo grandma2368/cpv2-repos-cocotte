@@ -20,9 +20,9 @@ def checkMatriceSize(a, b):
 def addMatrice(a, b):
     c = []
     nbMat = 0
-    if utils.checkString(a, "[]0123456789,;-") == 0:
+    if utils.checkString(str(a), "[]0123456789,;-") == 0:
         nbMat += 1
-    if utils.checkString(b, "[]0123456789,;-") == 0:
+    if utils.checkString(str(b), "[]0123456789,;-") == 0:
         nbMat += 1
     if nbMat == 2:
         size = checkMatriceSize(a, b)
@@ -52,11 +52,11 @@ def addMatrice(a, b):
 def multiplyMatrice(a, b):
     c = []
     nbMat = 0
-    if utils.checkString(a, "[]0123456789,;-") == 0:
+    if utils.checkString(str(a), "[]0123456789,;-") == 0:
         nbMat += 1
-    if utils.checkString(b, "[]0123456789,;-") == 0:
+    if utils.checkString(str(b), "[]0123456789,;-") == 0:
         nbMat += 2
-    if nbMat == 2:
+    if nbMat == 1:
         nbCol = len(b[0])
         nbLn = len(b)
         i = 0
@@ -71,7 +71,7 @@ def multiplyMatrice(a, b):
             c.append(lnC)
             i += 1
         return(c)
-    elif nbMat == 1:
+    elif nbMat == 2:
         nbCol = len(a[0])
         nbLn = len(a)
         i = 0
@@ -94,9 +94,9 @@ def multiplyMatrice(a, b):
 def divideMatrice(a, b):
     c = []
     nbMat = 0
-    if utils.checkString(a, "[]0123456789,;-") == 0:
+    if utils.checkString(str(a), "[]0123456789,;-") == 0:
         nbMat += 1
-    if utils.checkString(b, "[]0123456789,;-") == 0:
+    if utils.checkString(str(b), "[]0123456789,;-") == 0:
         nbMat += 2
     if nbMat == 2:
         if float(a) != 0:
