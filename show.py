@@ -1,4 +1,5 @@
 import utils
+import calcul
 
 #affiche toutes les donnees de data
 def showAllData(data):
@@ -7,24 +8,32 @@ def showAllData(data):
             print("nom variable")
             print(vrb[0])
             print("valeur variable")
-            i = 1
-            tmp = str(vrb[1])
-            lenght = len(tmp)
-            while i < lenght:
-                cur = ''
-                while tmp[i] != ']':
-                    if tmp[i] == "'":
-                        i += 1
+            #affiche un imaginaire
+            if calcul.imaginaire(vrb[1]) != -1:
+                res = ''
+                for mbm in vrb[1]:
+                    res = res + str(mbm)
+                print(res)
+            #affiche une matrice
+            else:
+                i = 1
+                tmp = str(vrb[1])
+                lenght = len(tmp)
+                while i < lenght:
+                    cur = ''
+                    while tmp[i] != ']':
+                        if tmp[i] == "'":
+                            i += 1
+                        else:
+                            cur = cur + tmp[i]
+                            i += 1
+                    cur = cur + tmp[i]
+                    print(cur)
+                    i += 1
+                    if tmp[i] == ']':
+                        break
                     else:
-                        cur = cur + tmp[i]
-                        i += 1
-                cur = cur + tmp[i]
-                print(cur)
-                i += 1
-                if tmp[i] == ']':
-                    break
-                else:
-                    i += 2
+                        i += 2
         else:
             print("nom variable")
             print(vrb[0])
@@ -68,24 +77,36 @@ def showDatum(data, name):
     for vrb in data:
         if type(vrb[1]) == list:
             found = 1
-            i = 1
-            tmp = str(vrb[1])
-            lenght = len(tmp)
-            while i < lenght:
-                cur = ''
-                while tmp[i] != ']':
-                    if tmp[i] == "'":
-                        i += 1
+            #affiche un imaginaire
+            if calcul.imaginaire(vrb[1]) != -1:
+                res = ''
+                for mbm in vrb[1]:
+                    if mbm != '*':
+                        if mbm != 'i':
+                            res = res + ' ' + str(mbm)
+                        else:
+                            res = res + str(mbm)
+                print(res)
+            #affiche une matrice
+            else:
+                i = 1
+                tmp = str(vrb[1])
+                lenght = len(tmp)
+                while i < lenght:
+                    cur = ''
+                    while tmp[i] != ']':
+                        if tmp[i] == "'":
+                            i += 1
+                        else:
+                            cur = cur + tmp[i]
+                            i += 1
+                    cur = cur + tmp[i]
+                    print(cur)
+                    i += 1
+                    if tmp[i] == ']':
+                        break
                     else:
-                        cur = cur + tmp[i]
-                        i += 1
-                cur = cur + tmp[i]
-                print(cur)
-                i += 1
-                if tmp[i] == ']':
-                    break
-                else:
-                    i += 2
+                        i += 2
         else:
             if vrb[0] == name:
                 found = 1

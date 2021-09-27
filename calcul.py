@@ -36,10 +36,24 @@ def add(a, b):
     c = float(a) + float(b)
     return(c)
 
+#verifie la presence d'imaginaire
+def imaginaire(exp):
+    found = 0
+    for vrb in exp:
+        if vrb == 'i':
+            found = 1
+    if found == 0:
+        return(-1)
+    return(exp)
+
 #calcule ce qu'il y a dans le tableau
 def someCalcul(calc):
     #boucle sur le tableau tant qu'il reste des calculs a faire dedans
     while len(calc) != 1:
+        #renvoie une erreur si on essaye de calculer des imaginaires
+        if utils.checkChr('i', calc):
+            print("Les calculs d'imaginaires ne semblaient pas etre demandes dans le sujet.")
+            return('error')
         #va chercher l'index des calculs selon leur ordre de priorite
         if utils.checkChr('*', calc) == 0:
             index = calc.index('*')
@@ -225,6 +239,10 @@ def replaceVariables(exp, data):
 def calculateWithVariables(exp, data, name):
     if replaceVariables(exp, data) == "error":
         return("error")
+    #verifie s'il s'agit du traitement d'un imaginaire
+    res = imaginaire(exp)
+    if res != -1:
+        return(res)
     res = calculate(exp, data, name)
     if res == "error":
         return("error")

@@ -3,6 +3,7 @@ import calcul
 import matrice
 import function
 import show
+import equationResolve
 
 #reassigne variable si elle existe deja
 def reassigneVar(name, value, data):
@@ -160,7 +161,15 @@ def newVarInData(varName, varValue, data):
         if value[len(value) - 1] != '?':
             print("Le probleme doit se terminer par un '?', rien ne doit se trouver apres.")
             return("error")
-        #REMPLACER TOUTES LES VARIABLES ET RESOUDRE L'EQUATION!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        i = 0
+        lenght = len(value) - 1
+        newValue = ''
+        while i < lenght:
+            newValue = newValue + value[i]
+            i += 1
+        #resoud l'equation si possible
+        if equationResolve.checkDegree(name, newValue, data) == "error":
+            return("error")
         return
 
     #assignation a faire
