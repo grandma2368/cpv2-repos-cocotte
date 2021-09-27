@@ -4,14 +4,14 @@ import utils
 import math
 
 #resoud si delta est null
-def deltaNullSolve(a, b, c):
+def deltaNullSolve(a, b):
     print("Delta null donc une solution dans le domaine du reel:")
     res = (-b)/(2 * a)
     print("X = " + str(res))
     return
 
 #resoud si delta est positif
-def deltaPositiveSolve(a, b, c, delta):
+def deltaPositiveSolve(a, b, delta):
     print("Delta positif donc deux solutions dans le domaine du reel:")
     delta = math.sqrt(delta)
     resOne = (-b - delta)/(2 * a)
@@ -21,8 +21,9 @@ def deltaPositiveSolve(a, b, c, delta):
     return
 
 #resoud si delta est negatif
-def deltaNegativeSolve(a, b, c, delta):
+def deltaNegativeSolve(a, b, delta):
     print("Delta negaitf donc deux solutions dans le domaine imaginaire:")
+    delta = -1 * delta
     delta = math.sqrt(delta)
     im = (delta)/(2 * a)
     real = (-b)/(2 * a)
@@ -70,6 +71,10 @@ def searchDelta(ptOne, ptTwo):
             if i - 2 == 0:
                 if utils.checkChr(ptOne[i - 2], "-1234567890.") == -1:
                     b = 1
+                elif ptTwo[i - 1] == '-':
+                    res = -1
+                elif ptTwo[i - 1] == "empty":
+                    res = 1
                 else:
                     b = -1
                 if ptOne[i + 2] == '1':
@@ -155,6 +160,10 @@ def searchDelta(ptOne, ptTwo):
             elif i - 2 > 0:
                 if i - 3 >= 0 and ptTwo[i - 3] == '-':
                     res = float(ptTwo[i - 2]) * -1
+                elif ptTwo[i - 1] == '-':
+                    res = -1
+                elif ptTwo[i - 1] == "empty":
+                    res = 1
                 else:
                     res = float(ptTwo[i - 2])
                 b = b - res
@@ -187,11 +196,11 @@ def searchDelta(ptOne, ptTwo):
         i += 1
     delta = b * b - 4 * a * c
     if delta == 0:
-        deltaNullSolve(a, b, c)
+        deltaNullSolve(a, b)
     elif delta > 0:
-        deltaPositiveSolve(a, b, c, delta)
+        deltaPositiveSolve(a, b, delta)
     else:
-        deltaNegativeSolve(a, b, c, delta)
+        deltaNegativeSolve(a, b, delta)
 
 
 #verifie si bien equation de degre 2 ou inferieur
