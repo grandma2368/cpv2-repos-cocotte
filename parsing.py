@@ -155,7 +155,6 @@ def newVarInData(varName, varValue, data):
     if len(name) == 1 and name[0] == 'i':
         print("Une variable ne peut etre nommee 'i' en raison des nombres imaginaires.")
         return("error")
-
     #pb a resoudre
     if len(value) > 1 and '?' in value:
         if value[len(value) - 1] != '?':
@@ -171,7 +170,6 @@ def newVarInData(varName, varValue, data):
         if equationResolve.checkDegree(name, newValue, data) == "error":
             return("error")
         return
-
     #assignation a faire
 
     #recherche si le nom de variable ne contient que des lettres ou non
@@ -203,7 +201,6 @@ def newVarInData(varName, varValue, data):
             data.append(datum)
         show.showDatum(data, name)
         return
-
     #il s'agit de nombres imaginaires ou variables a aller chercher dans data
     if utils.checkString(value, "1234567890+-/.*i%^()qwertyuiiopasdfghjklzxcvbnm") == 0:
         exp = parsExpression(value)
