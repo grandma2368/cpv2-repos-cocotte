@@ -67,6 +67,7 @@ def showDatum(data, name):
     found = 0
     for vrb in data:
         if type(vrb[1]) == list:
+            found = 1
             i = 1
             tmp = str(vrb[1])
             lenght = len(tmp)
@@ -119,7 +120,6 @@ def showDatum(data, name):
                         exp = exp + cur + ' '
                         cur = ''
                         fnd = 0
+                print(exp)
     if found == 0:
         print("La variable '" + name + "' n'a pas encore ete assignee.")
-    else:
-        print(exp)

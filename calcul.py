@@ -1,5 +1,6 @@
 import utils
 import function
+import matrice
 
 #puissance
 def power(a, b):
@@ -42,7 +43,12 @@ def someCalcul(calc):
         #va chercher l'index des calculs selon leur ordre de priorite
         if utils.checkChr('*', calc) == 0:
             index = calc.index('*')
-            res = multiply(calc[index - 1], calc[index + 1])
+            if type(calc[index - 1]) == list or type(calc[index + 1]) == list:
+                res = matrice.multiplyMatrice(calc[index -1], calc[index + 1])
+                if res == "error":
+                    return("error")
+            else :
+                res = multiply(calc[index - 1], calc[index + 1])
             calc[index - 1] = res
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
@@ -52,7 +58,11 @@ def someCalcul(calc):
                 return("error")
         if utils.checkChr('^', calc) == 0:
             index = calc.index('^')
-            res = power(calc[index - 1], calc[index + 1])
+            if type(calc[index - 1]) == list or type(calc[index + 1]) == list:
+                print("Le calcul de puissance d'une matrice revient au calcul vectoriel qui est un bonus non soutenu par ce projet.")
+                return("error")
+            else:
+                res = power(calc[index - 1], calc[index + 1])
             if res == "error":
                 return("error")
             calc[index - 1] = res
@@ -64,7 +74,12 @@ def someCalcul(calc):
                 return("error")
         if utils.checkChr('/', calc) == 0:
             index = calc.index('/')
-            res = divide(calc[index - 1], calc[index + 1])
+            if type(calc[index - 1]) == list or type(calc[index + 1]) == list:
+                res = matrice.divideMatrice(calc[index -1], calc[index + 1])
+                if res == "error":
+                    return("error")
+            else:
+                res = divide(calc[index - 1], calc[index + 1])
             if res == "error":
                 return("error")
             calc[index - 1] = res
@@ -76,7 +91,11 @@ def someCalcul(calc):
                 return("error")
         if utils.checkChr('%', calc) == 0:
             index = calc.index('%')
-            res = modulo(calc[index - 1], calc[index + 1])
+            if type(calc[index - 1]) == list or type(calc[index + 1]) == list:
+                print("Le calcul du modulo d'une matrice n'est pas pris en compte par ce projet.")
+                return("error")
+            else:
+                res = modulo(calc[index - 1], calc[index + 1])
             if res == "error":
                 return("error")
             calc[index - 1] = res
@@ -88,7 +107,12 @@ def someCalcul(calc):
                 return("error")
         if utils.checkChr('+', calc) == 0:
             index = calc.index('+')
-            res = add(calc[index - 1], calc[index + 1])
+            if type(calc[index - 1]) == list or type(calc[index + 1]) == list:
+                res = matrice.addMatrice(calc[index -1], calc[index + 1])
+                if res == "error":
+                    return("error")
+            else:
+                res = add(calc[index - 1], calc[index + 1])
             calc[index - 1] = res
             if index + 1 <= len(calc):
                 calc.pop(index + 1)
@@ -98,12 +122,19 @@ def someCalcul(calc):
                 return("error")
         if utils.checkChr('-', calc) == 0:
             index = calc.index('-')
-            if index + 1 <= len(calc):
-                calc[index + 1] = int(calc[index + 1]) * -1
+            if type(calc[index + 1]) == list:
+                res = matrice.multiplyMatrice(-1, calc[index + 1])
+                if res == "error":
+                    return("error")
+                calc[index + 1] = res
                 calc[index] = '+'
             else:
-                print("ERREUR taille tableau dans les calculs")
-                return("error")
+                if index + 1 <= len(calc):
+                    calc[index + 1] = int(calc[index + 1]) * -1
+                    calc[index] = '+'
+                else:
+                    print("ERREUR taille tableau dans les calculs")
+                    return("error")
     if len(calc) != 1:
         return("error")
     return(calc)
@@ -154,21 +185,6 @@ def calculate(exp, data, name):
     if someCalcul(exp) == "error":
         return("error")
     return(exp[0])
-    # #check si c'est un calcul ou variable a assigner
-    # if name == 0:
-    #     print(exp[0])
-    #     return
-    # #check pour reassigner ou non une variable
-    # reassigned = 0
-    # for eachVar in data:
-    #     if eachVar[0] == name:
-    #         eachVar[1] = exp[0]
-    #         reassigned = 1
-    #         show.showDatum(data, name)
-    # if reassigned == 0:
-    #     datum = [name, exp[0]]
-    #     data.append(datum)
-    #     show.showDatum(data, name)
 
 #checke et remplace les variables par leur valeur dans data
 def replaceVariables(exp, data):
