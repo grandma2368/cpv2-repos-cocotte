@@ -1,17 +1,25 @@
 import parsing
 import function
 import utils
+import math
 
 #resoud si delta est null
-def deltaNullSolve(a, b, c, delta):
+def deltaNullSolve(a, b, c):
+    res = (-b)/(2 * a)
     return
 
 #resoud si delta est positif
 def deltaPositiveSolve(a, b, c, delta):
+    delta = math.sqrt(delta)
+    resOne = (-b - delta)/(2 * a)
+    resTwo = (-b + delta)/(2 * a)
     return
 
 #resoud si delta est negatif
 def deltaNegativeSolve(a, b, c, delta):
+    delta = math.sqrt(delta)
+    im = (delta)/(2 * a)
+    real = (-b)/(2 * a)
     return
 
 #simplifie l'equation
@@ -171,7 +179,7 @@ def searchDelta(ptOne, ptTwo):
         i += 1
     delta = b * b - 4 * a * c
     if delta == 0:
-        deltaNullSolve(a, b, c, delta)
+        deltaNullSolve(a, b, c)
     elif delta > 0:
         deltaPositiveSolve(a, b, c, delta)
     else:
