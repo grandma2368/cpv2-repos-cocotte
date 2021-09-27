@@ -5,21 +5,29 @@ import math
 
 #resoud si delta est null
 def deltaNullSolve(a, b, c):
+    print("Delta null donc une solution dans le domaine du reel:")
     res = (-b)/(2 * a)
+    print("X = " + str(res))
     return
 
 #resoud si delta est positif
 def deltaPositiveSolve(a, b, c, delta):
+    print("Delta positif donc deux solutions dans le domaine du reel:")
     delta = math.sqrt(delta)
     resOne = (-b - delta)/(2 * a)
     resTwo = (-b + delta)/(2 * a)
+    print("X1 = " + str(resOne))
+    print("X2 = " + str(resTwo))
     return
 
 #resoud si delta est negatif
 def deltaNegativeSolve(a, b, c, delta):
+    print("Delta negaitf donc deux solutions dans le domaine imaginaire:")
     delta = math.sqrt(delta)
     im = (delta)/(2 * a)
     real = (-b)/(2 * a)
+    print("X1 = " + str(im) + ' + ' + str(real))
+    print("X2 = " + str(im) + ' - ' + str(real))
     return
 
 #simplifie l'equation
