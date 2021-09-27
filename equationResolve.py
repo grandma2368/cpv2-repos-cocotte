@@ -2,6 +2,18 @@ import parsing
 import function
 import utils
 
+#resoud si delta est null
+def deltaNullSolve(a, b, c, delta):
+    return
+
+#resoud si delta est positif
+def deltaPositiveSolve(a, b, c, delta):
+    return
+
+#resoud si delta est negatif
+def deltaNegativeSolve(a, b, c, delta):
+    return
+
 #simplifie l'equation
 def searchDelta(ptOne, ptTwo):
     #x^2
@@ -158,6 +170,13 @@ def searchDelta(ptOne, ptTwo):
             c = c - res
         i += 1
     delta = b * b - 4 * a * c
+    if delta == 0:
+        deltaNullSolve(a, b, c, delta)
+    elif delta > 0:
+        deltaPositiveSolve(a, b, c, delta)
+    else:
+        deltaNegativeSolve(a, b, c, delta)
+
 
 #verifie si bien equation de degre 2 ou inferieur
 def checkDegree(partOne, partTwo, data):
