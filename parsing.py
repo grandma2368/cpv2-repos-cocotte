@@ -4,6 +4,14 @@ import matrice
 import function
 import show
 
+#reassigne variable si elle existe deja
+def reassigneVar(name, value, data):
+    for eachVar in data:
+        if eachVar[0] == name:
+            eachVar[1] = value
+            return(0)
+    return(-1)
+
 #checke s'il faut remplacer des valeurs dans data et les remplace par leur valeur
 def checkVar(exp, data, name):
     for vrb in exp:
@@ -182,8 +190,9 @@ def newVarInData(varName, varValue, data):
         res = calcul.calculate(exp, data, name)
         if res == "error":
             return("error")
-        datum = [name, res]
-        data.append(datum)
+        if reassigneVar(name, res, data) == -1:
+            datum = [name, res]
+            data.append(datum)
         show.showDatum(data, name)
         return
 
@@ -195,8 +204,9 @@ def newVarInData(varName, varValue, data):
         res = calcul.calculateWithVariables(exp, data, name)
         if res == "error":
             return("error")
-        datum = [name, res]
-        data.append(datum)
+        if reassigneVar(name, res, data) == -1:
+            datum = [name, res]
+            data.append(datum)
         show.showDatum(data, name)
         return
     else:

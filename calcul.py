@@ -173,6 +173,7 @@ def calculate(exp, data, name):
 #checke et remplace les variables par leur valeur dans data
 def replaceVariables(exp, data):
     i = 0
+    found = 0
     lenght = len(exp)
     while i < lenght:
         if utils.checkString(exp[i], "qwertyuiopasdfghjklzxcvbnm") == 0:
