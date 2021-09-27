@@ -2,6 +2,7 @@ import parsing
 import function
 import utils
 import math
+import calcul
 
 #resoud si delta est null
 def deltaNullSolve(a, b):
@@ -202,6 +203,119 @@ def searchDelta(ptOne, ptTwo):
     else:
         deltaNegativeSolve(a, b, delta)
 
+#resoud degree 0
+def solveNullDegree(partOne, partTwo):
+    resOne = calcul.calculate(partOne)
+    if resOne == "error":
+        return("error")
+    resTwo = calcul.calculate(partTwo)
+    if resTwo == "error":
+        return("error")
+    if resTwo == resOne:
+        print("L'egalite entre les deux membres de l'equation est bien du type 0 = 0.")
+    else:
+        print("L'egalite entre les deux membres de l'equation n'est pas du type 0 = 0.")
+
+#resoud degree 1
+def solveOneDegree(one, two):
+    i = 0
+    lenght = len(one)
+    a = 0
+    b = 0
+    while i < lenght:
+        if one[i] == 'x' and i - 1 >= 0 and one[i - 1] == '*':
+            if i - 3 >= 0 and one[i - 3] == '-':
+                a = float(one[i - 2]) * -1
+                if one[i + 1] == '^':
+                    one[i + 1] = "empty"
+                    one[i + 2] = "empty"
+                one[i] = "empty"
+                one[i - 1] = "empty"
+                one[i - 2] = "empty"
+                one[i - 3] = "empty"
+            elif i - 2 >= 0 and utils.checkString(one[i - 2], "0123456789.") == 0:
+                a = float(one[i -2])
+                if one[i + 1] == '^':
+                    one[i + 1] = "empty"
+                    one[i + 2] = "empty"
+                one[i] = "empty"
+                one[i - 1] = "empty"
+                one[i - 2] = "empty"
+            elif i - 2 >= 0 and utils.checkChr('-', one[i - 2]) == 0:
+                a = -1
+                if one[i + 1] == '^':
+                    one[i + 1] = "empty"
+                    one[i + 2] = "empty"
+                one[i] = "empty"
+                one[i - 1] = "empty"
+                one[i - 2] = "empty"
+            else:
+                a = 1
+                if one[i + 1] == '^':
+                    one[i + 1] = "empty"
+                    one[i + 2] = "empty"
+                one[i] = "empty"
+        i += 1
+    i = 0
+    while i < lenght:
+        if utils.checkString(one[i], "0123456789.") == 0:
+            if i - 1 >= 0:
+                if one[i - 1] == '-':
+                    b = float(one[i]) * -1
+                else:
+                    b = float(one[i])
+        i += 1
+    lenght = len(two)
+    res = 0
+    while i < lenght:
+        if two[i] == 'x' and i - 1 >= 0 and two[i - 1] == '*':
+            if i - 3 >= 0 and two[i - 3] == '-':
+                res = float(two[i - 2]) * -1
+                if two[i + 1] == '^':
+                    two[i + 1] = "empty"
+                    two[i + 2] = "empty"
+                two[i] = "empty"
+                two[i - 1] = "empty"
+                two[i - 2] = "empty"
+                two[i - 3] = "empty"
+            elif i - 2 >= 0 and utils.checkString(two[i - 2], "0123456789.") == 0:
+                res = float(two[i -2])
+                if two[i + 1] == '^':
+                    two[i + 1] = "empty"
+                    two[i + 2] = "empty"
+                two[i] = "empty"
+                two[i - 1] = "empty"
+                two[i - 2] = "empty"
+            elif i - 2 >= 0 and utils.checkChr('-', two[i - 2]) == 0:
+                res = -1
+                if two[i + 1] == '^':
+                    two[i + 1] = "empty"
+                    two[i + 2] = "empty"
+                two[i] = "empty"
+                two[i - 1] = "empty"
+                two[i - 2] = "empty"
+            else:
+                res = 1
+                if two[i + 1] == '^':
+                    two[i + 1] = "empty"
+                    two[i + 2] = "empty"
+                two[i] = "empty"
+        i += 1
+    a = a - res
+    i = 0
+    res = 0
+    while i < lenght:
+        if utils.checkString(two[i], "0123456789.") == 0:
+            if i - 1 >= 0:
+                if two[i - 1] == '-':
+                    res = float(two[i]) * -1
+                else:
+                    res = float(two[i])
+        i += 1
+    b = b - res
+    print("Equation de degree 1, une solution dans le domaine du reel :")
+    res = (-b)/a
+    print("X = " + str(res))
 
 #verifie si bien equation de degre 2 ou inferieur
 def checkDegree(partOne, partTwo, data):
@@ -240,8 +354,8 @@ def checkDegree(partOne, partTwo, data):
         searchDelta(expOne, expTwo)
         return
     elif degree == 1:
-        print("degree 1")
+        solveOneDegree(expOne, expTwo)
         return
     else:
-        print("degree 0")
+        solveNullDegree(expOne, expTwo)
         return
