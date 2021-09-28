@@ -309,8 +309,8 @@ def solveOneDegree(one, two):
             if i - 1 >= 0:
                 if two[i - 1] == '-':
                     res = float(two[i]) * -1
-                else:
-                    res = float(two[i])
+            else:
+                res = float(two[i])
         i += 1
     b = b - res
     print("Equation de degree 1, une solution dans le domaine du reel :")
@@ -367,18 +367,12 @@ def checkDegree(partOne, partTwo, data):
     while i < lenght:
         partTwo = partTwo + expTwo[i]
         i += 1
-    #DEBUG/TEST
-    print("avant le remplacement de variable")
-    #DEBUG/TEST
     if function.replaceVariablesFunction(expOne, data, 'x') == "error":
         print("Ce programme ne peut resoudre que les equations de degree 2 ou inferieur et la variable de l'equation doit etre notee x.")
         return("error")
     if function.replaceVariablesFunction(expTwo, data, 'x') == "error":
         print("Ce programme ne peut resoudre que les equations de degree 2 ou inferieur et la variable de l'equation doit etre notee x.")
         return("error")
-    #DEBUG/TEST
-    print("apres le remplacement de variable")
-    #DEBUG/TEST
     lenghtOne = len(expOne)
     lenghtTwo = len(expTwo)
     degree = 0
