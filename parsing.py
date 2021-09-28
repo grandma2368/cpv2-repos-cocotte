@@ -7,8 +7,13 @@ import equationResolve
 
 #reassigne variable si elle existe deja
 def reassigneVar(name, value, data):
+    resName = name.split('(')
     for eachVar in data:
+        resVar = eachVar[0].split('(')
         if eachVar[0] == name:
+            eachVar[1] = value
+            return(0)
+        elif resVar[0] == resName[0]:
             eachVar[1] = value
             return(0)
     return(-1)
@@ -183,7 +188,8 @@ def newVarInData(varName, varValue, data):
         res = function.checkFunction(name, value, data)
         if res == "error":
             return("error")
-        data.append(res)
+        if reassigneVar(res[0], res[1], data) == -1:
+            data.append(res)
         show.showDatum(data, name)
         return
 

@@ -226,7 +226,7 @@ def solveOneDegree(one, two):
         if one[i] == 'x' and i - 1 >= 0 and one[i - 1] == '*':
             if i - 3 >= 0 and one[i - 3] == '-':
                 a = float(one[i - 2]) * -1
-                if one[i + 1] == '^':
+                if i + 1 < lenght and one[i + 1] == '^':
                     one[i + 1] = "empty"
                     one[i + 2] = "empty"
                 one[i] = "empty"
@@ -235,7 +235,7 @@ def solveOneDegree(one, two):
                 one[i - 3] = "empty"
             elif i - 2 >= 0 and utils.checkString(one[i - 2], "0123456789.") == 0:
                 a = float(one[i -2])
-                if one[i + 1] == '^':
+                if i + 1 < lenght and one[i + 1] == '^':
                     one[i + 1] = "empty"
                     one[i + 2] = "empty"
                 one[i] = "empty"
@@ -243,7 +243,7 @@ def solveOneDegree(one, two):
                 one[i - 2] = "empty"
             elif i - 2 >= 0 and utils.checkChr('-', one[i - 2]) == 0:
                 a = -1
-                if one[i + 1] == '^':
+                if i + 1 < lenght and one[i + 1] == '^':
                     one[i + 1] = "empty"
                     one[i + 2] = "empty"
                 one[i] = "empty"
@@ -251,7 +251,7 @@ def solveOneDegree(one, two):
                 one[i - 2] = "empty"
             else:
                 a = 1
-                if one[i + 1] == '^':
+                if i + 1 < lenght and one[i + 1] == '^':
                     one[i + 1] = "empty"
                     one[i + 2] = "empty"
                 one[i] = "empty"
@@ -319,37 +319,93 @@ def solveOneDegree(one, two):
 
 #verifie si bien equation de degre 2 ou inferieur
 def checkDegree(partOne, partTwo, data):
-    lenghtOne = len(partOne)
-    lenghtTwo = len(partTwo)
-    degree = 0
-    i = 0
-    while i < lenghtOne:
-        if partOne[i] == '^':
-            if float(partOne[i + 1]) > 2:
+    if utils.checkString(partOne, "azertyuiopqsdfghjklmwxcvbn()") == 0:
+        if '(' in partOne:
+            one = partOne.split('(')
+            ukn = one[1].split(')')
+            if ukn[0] != 'x':
                 print("Ce programme ne peut resoudre que les equations de degree 2 ou inferieur et la variable de l'equation doit etre notee x.")
                 return("error")
-            if float(partOne[i + 1]) > degree:
-                degree = float(partOne[i + 1])
-        i += 1
+            for vrb in data:
+                res = vrb[0].split('(')
+                if res[0] == one[0]:
+                    expOne = vrb[1]
+                    expOne = parsing.parsExpression(expOne)
+                    if expOne == "error":
+                        return("error")
+    else:
+        expOne = parsing.parsExpression(partOne)
+        if expOne == "error":
+            return("error")
     i = 0
-    while i < lenghtTwo:
-        if partTwo[i] == '^':
-            if float(partTwo[i + 1]) > 2:
+    lenght = len(expOne)
+    partOne = ''
+    while i < lenght:
+        partOne = partOne + expOne[i]
+        i += 1
+    if utils.checkString(partTwo, "azertyuiopqsdfghjklmwxcvbn()") == 0:
+        if '(' in partTwo:
+            two = partTwo.split('(')
+            ukn = two[1].split(')')
+            if ukn[0] != 'x':
                 print("Ce programme ne peut resoudre que les equations de degree 2 ou inferieur et la variable de l'equation doit etre notee x.")
                 return("error")
+            for vrb in data:
+                res = vrb[0].split('(')
+                if res[0] == two[0]:
+                    expTwo = vrb[1]
+                    expTwo = parsing.parsExpression(expTwo)
+                    if expTwo == "error":
+                        return("error")
+    else:
+        expTwo = parsing.parsExpression(partTwo)
+        if expTwo == "error":
+            return("error")
+    i = 0
+    lenght = len(expTwo)
+    partTwo = ''
+    while i < lenght:
+        partTwo = partTwo + expTwo[i]
         i += 1
-    expOne = parsing.parsExpression(partOne)
-    if expOne == "error":
-        return("error")
-    expTwo = parsing.parsExpression(partTwo)
-    if expTwo == "error":
-        return("error")
+    #DEBUG/TEST
+    print("avant le remplacement de variable")
+    #DEBUG/TEST
     if function.replaceVariablesFunction(expOne, data, 'x') == "error":
         print("Ce programme ne peut resoudre que les equations de degree 2 ou inferieur et la variable de l'equation doit etre notee x.")
         return("error")
     if function.replaceVariablesFunction(expTwo, data, 'x') == "error":
         print("Ce programme ne peut resoudre que les equations de degree 2 ou inferieur et la variable de l'equation doit etre notee x.")
         return("error")
+    #DEBUG/TEST
+    print("apres le remplacement de variable")
+    #DEBUG/TEST
+    lenghtOne = len(expOne)
+    lenghtTwo = len(expTwo)
+    degree = 0
+    i = 0
+    while i < lenghtOne:
+        if expOne[i] == '^':
+            if float(expOne[i + 1]) > 2:
+                print("Ce programme ne peut resoudre que les equations de degree 2 ou inferieur et la variable de l'equation doit etre notee x.")
+                return("error")
+            if float(expOne[i + 1]) > degree:
+                degree = float(expOne[i + 1])
+        elif expOne[i] == 'x':
+            if 1 > degree:
+                degree = 1
+        i += 1
+    i = 0
+    while i < lenghtTwo:
+        if expTwo[i] == '^':
+            if float(expTwo[i + 1]) > 2:
+                print("Ce programme ne peut resoudre que les equations de degree 2 ou inferieur et la variable de l'equation doit etre notee x.")
+                return("error")
+            if float(expTwo[i + 1]) > degree:
+                degree = float(expTwo[i + 1])
+        elif expTwo[i] == 'x':
+            if 1 > degree:
+                degree = 1
+        i += 1
     if degree == 2:
         searchDelta(expOne, expTwo)
         return
