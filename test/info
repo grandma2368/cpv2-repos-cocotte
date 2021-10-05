@@ -1,0 +1,32 @@
+# faire un résumé des differents cas a traité.
+
+assignation de valeur a variable -> resolution de calcul
+solution d'un calcul -> resolution de calcul.
+
+resolution d'une equation de degré <= 2
+
+assignation de variable a variable
+
+gestion de fonctions
+
+
+Matrices :
+
+toujours deux de meme taille pour addition et sous
+addition addition des coefficients au meme indice
+soustraction pareil que l'addition
+multiplication
+[a1, a2] ** [a1, .] = [a1 * a1 + a2 * a2, .]
+[., .]   ** [a2, .]   = [ ., .]
+
+ligne_b,   colone_b = [a, b] === [cb, cb/lb]
+                      [c, d] === [. , lb]
+
+taille de la matrice resultante = nbr de ligne de la premiere et nombre de collone de la deuxieme
+
+compatible pour multiplication et div nb de colonne de la premiere = nbr de ligne de la deuxieme
+
+multiplication avec un entier multiplier chaque terme avec l'entier
+
+#https://brilliant.org/wiki/shunting-yard-algorithm/
+
