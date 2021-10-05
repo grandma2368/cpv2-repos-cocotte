@@ -1,11 +1,12 @@
 import sys
 import re
 import parsing
+import utils
 
 while 1:
     input = raw_input('> ')
     input = re.sub(r'[ \t]', '', input).lower()
-    input = parsing.add_multiplication(input)
+    input = utils.add_multiplication(input)
 
     if input == 'quit' or input == 'q' or input == 'exit':
         sys.exit()
@@ -14,8 +15,6 @@ while 1:
         # print_var()
     else:
         try:
-            print("parsing") #A IMPLEMETER
-            #parsing(input)
-
+            parsing.parsing(input)
         except:
             pass
