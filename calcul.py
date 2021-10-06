@@ -1,11 +1,36 @@
 import re
 import utils
+import type
+
+#calcul l'image d'une fonction
+def resolve_func(func, data):
+    fncRgx = re.compile('^([a-z]+)\((.+)\)')
+    match = re.match(fncRgx, func)
+    if match is not None:
+        name = match.group(1)
+        calc = match.group(2)
+        res = resolve(calc + '=?')
+        function = data["function"][name]
+        calcul = function.func.replace(function.var, '(' + res.to_str() + ')').replace(' ', '')
+        return resolve(calcul + '=?')
+    else:
+        print("\033[91mERREUR: La fonction n'est pas conforme.\033[0m")
+        raise Exception
+
+#calcul matriciel
+def calc_mult_matrice(matrice1, matrice2, lign, col, nbr_lign):
+    x = 0
+    res = type.Rationels(0)
+    while x < nbr_lign:
+        res = res.add(matrice1[lign][x].mult(matrice2[x][col]))
+        x += 1
+    return res
 
 #calcule l'expression mathematique
-def npi_solver(input):
+def npi_solver(input, data):
     index = 0
     if len(input) == 1:
-        input[0] = types(input[0])
+        input[0] = utils.types(input[0], data)
     while len(input) > 1:
         if isinstance(input[index], basestring) and re.match(r'^\*\*|[\-+/^%=*]$', input[index]):
             res = calc(input[index-2], input[index-1], input[index])
@@ -68,16 +93,16 @@ def sortOut(tokens):
     return output
 
 #resoud une portion d'expression mathematique
-def resolve(input):
+def resolve(input, data):
     if input.endswith("=?"):
         exp = utils.to_tab(input[:-2])
         sorted = sortOut(exp)
-        return npi_solver(sorted)
+        return npi_solver(sorted, data)
     elif re.match(r'^[a-z]+=', input):
         input = re.sub(r'^[a-z]+=', '', input)
         exp = utils.to_tab(input)
         sorted = sortOut(exp)
-        return npi_solver(sorted)
+        return npi_solver(sorted, data)
     else:
         print("\033[91mERREUR: Ceci n'est pas une expression mathematique.\033[0m")
         raise Exception

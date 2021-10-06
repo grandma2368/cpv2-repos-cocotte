@@ -1,25 +1,39 @@
 import parsing
 import re
+import type
+import calcul
 
-#cherche le type du nombre
-def types(nbr):
+#cherche les variables dans data
+def recup_var(var, data):
+    if var in data["rationel"]:
+        return data["rationel"][var]
+    elif var in data["complexe"]:
+        return data["complexe"][var]
+    elif var in data["matrices"]:
+        return data["matrices"][var]
+    else:
+        print("\033[91mERREUR: Variable '" + var + "' non definie.\033[0m")
+        raise Exception
+
+#cherche le type du nombre et resoud le caclul en fonction
+def types(nbr, data):
     fncRgx = re.compile('^[a-z]+\((.+)\)')
     nbrRgx = re.compile('^-?[0-9]+(\.[0-9]+)?')
     matrice_regex = "^\[\[[^],]+(,[^],]+)*\](;\[[^],]+(,[^],]+)*\])*\]"
-    if isinstance(nbr, Rationels) or isinstance(nbr, Complex) or isinstance(nbr, Matrice):
+    if isinstance(nbr, type.Rationels) or isinstance(nbr, type.Complex) or isinstance(nbr, type.Matrice):
         return nbr
     if nbr == 'i':
-        nbr = Complex(0, 1)
+        nbr = type.Complex(0, 1)
     elif re.match(fncRgx, nbr):
-        nbr = resolve_func(nbr)
+        nbr = calcul.resolve_func(nbr, data)
     elif nbr.isalpha():
-        nbr = recup_var(nbr)
+        nbr = recup_var(nbr, data)
     elif re.match(nbrRgx, nbr):
-        nbr = Rationels(float(nbr))
+        nbr = type.Rationels(float(nbr))
     elif re.match(matrice_regex, nbr):
-        nbr = parse_matrice(nbr)
+        nbr = parsing.parse_matrice(nbr)
     else:
-        print "\033[91mError: Token not recognized in " + nbr + "\033[0m"
+        print("\033[91mERREUR: Type de '" + nbr + "' non reconnu.\033[0m")
         raise Exception
     return nbr
 

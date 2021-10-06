@@ -1,5 +1,48 @@
 import re
 import assignation
+import type
+import calcul
+
+#parse une matrice
+def parse_matrice(matrice_str, data):
+    lign = matrice_str.count(';') + 1
+    column = matrice_str.split(']')[0].count(',') + 1
+    matrice = []
+    index = 1
+    lign_count = 0
+    column_count = 0
+    while index < len(matrice_str) - 1:
+        if matrice_str[index] == '[':
+            lign_count += 1
+            matrice.append([])
+            index += 1
+        elif matrice_str[index] == ']':
+            if column_count + 1 != column:
+                print("\033[91mERREUR: Matrice non conforme.\033[0m")
+                raise Exception
+            column_count = 0
+            index += 1
+        elif matrice_str[index] == ',':
+            column_count += 1
+            index += 1
+        elif matrice_str[index] == ';':
+            index += 1
+        else:
+            i = matrice_str.find(',', index)
+            y = matrice_str.find(']', index)
+            if y < i or i == -1:
+                i = y
+            if i >= 0:
+                nbr = calcul.resolve(matrice_str[index:i] + "=?", data)
+                matrice[lign_count - 1].append(nbr)
+                index += i - index
+            else:
+                print("\033[91mERREUR: Matrice non conforme.\033[0m")
+                raise Exception
+    if lign_count != lign:
+        print("\033[91mERREUR: Matrice non conforme.\033[0m")
+        raise Exception
+    return type.Matrice(matrice, lign, column)
 
 #retourne une matrice s'il y en a une
 def extract_matrice(input):
@@ -18,7 +61,6 @@ def extract_nbr(input):
         return match.group(0)
     else:
         return None
-
 
 #retourne le nom de la variable s'il est valide
 def extract_var(input):
@@ -97,8 +139,8 @@ def parsing(input, data):
 
     if tpe['assign_func']:
         assignation.assign_func(input, tpe, data)
-    # elif tpe['assign']:
-    #     assign_resolve(input, tpe, data)
+    elif tpe['assign']:
+        assignation.assign_resolve(input, tpe, data)
     # elif tpe['resolve_equat']:
     #     resolve_equat(input)
     # else:
