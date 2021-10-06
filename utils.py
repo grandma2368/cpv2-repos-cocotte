@@ -3,6 +3,99 @@ import re
 import type
 import calcul
 
+#explicite la puissance 1
+def add_pow(equat):
+    index = 0
+    while index < len(equat):
+        if equat[index] == 'x':
+            if index < len(equat) - 1 and equat[index+1] != "^":
+                equat = equat[:index+1] + "^1" + equat[index+1:]
+            elif index >= len(equat) - 1:
+                equat += "^1"
+        if equat[index].isdigit():
+            if index -1 < 0 or equat[index-1] != '^':
+                while index < len(equat) and (equat[index].isdigit() or equat[index] == "."):
+                    index += 1
+                if index == len(equat) or equat[index] != "*":
+                    equat = equat[:index] + "*x^0" + equat[index:]
+        index += 1
+    return equat
+
+#checke les parentheses
+def parenthesis(equat):
+    index = 0
+    parenthese = -1
+    parentheses_start = 0
+    while index < len(equat):
+        if equat[index] == ')':
+            if parenthese == -1:
+                print("\033[91mERREUR: Parenthses non conformes.\033[0m")
+                raise Exception
+            else:
+                parenthese -= 1
+                if parenthese == 0:
+                    parenthese = -1
+                    res = parenthesis(equat[parentheses_start + 1:index])
+                    equat = equat.replace(equat[parentheses_start:index+1], res)
+                    index = 0
+        if equat[index] == '(':
+            if parenthese == -1:
+                parentheses_start = index
+                parenthese = 1
+            else:
+                parenthese += 1
+        index += 1
+    return calcul.reduction(equat)
+
+#explicite le 1 des +x et -x
+def add_one_before_x(equat):
+    expr = ""
+    if equat.startswith('x'):
+        expr = '1'+equat
+    else:
+        expr = equat
+    return expr.replace('-x', '-1x').replace('+x', '+1x')
+
+#remplace les variables par rapport a data
+def replace_var(equat, variables):
+    cpxRgx = "[^a-z]i[^a-z]|^i[^a-z]|[^a-z]i$"
+    if re.match(cpxRgx, equat):
+        print("\033[91mError: Can't have complex in equation\033[0m")
+        raise Exception
+    index = 0
+    while index < len(equat):
+        if equat[index].isalpha():
+            if parsing.extract_function(equat[index:]):
+                func_regex = re.compile('^([a-z]+)\((.+)\)')
+                match = re.match(func_regex, equat[index:])
+                if match is not None:
+                    name = match.group(1)
+                    calc = '(' + match.group(2) + ')'
+
+                    function = variables["function"][name]
+                    equat = equat.replace(match.group(0), function.func.replace(function.var, calc))
+                index = 0
+            else:
+                var = parsing.extract_var(equat[index:])
+                if var != 'x':
+                    nbr = ""
+                    if var in variables["rationel"]:
+                        nbr = variables["rationel"][var]
+                        nbr = str(nbr.nbr)
+                    elif var in variables["complexe"]:
+                        print("\033[91mERREUR: Ne peut resoudre une equation avec un complexe.\033[0m")
+                        raise Exception
+                    elif var in variables["matrices"]:
+                        print("\033[91mERREUR: Ne peut resoudre une equation du second degree avec une matrice.\033[0m")
+                        raise Exception
+                    else:
+                        print("\033[91mERREUR: Variable %s non definie.\033[0m" % var)
+                        raise Exception
+                    equat = equat.replace(var, nbr).replace(' ', '')
+                    index = 0
+        index += 1
+    return equat
+
 #cherche les variables dans data
 def recup_var(var, data):
     if var in data["rationel"]:

@@ -2,6 +2,15 @@ import re
 import assignation
 import type
 import calcul
+import utils
+
+#parse une equation
+def parse_equat(equat, data):
+    r = utils.replace_var(equat, data)
+    simpler = utils.add_multiplication(utils.add_one_before_x(r))
+    res = utils.parenthesis(simpler)
+    resBis = utils.add_pow(res)
+    calcul.resolve(resBis, data)
 
 #parse une matrice
 def parse_matrice(matrice_str, data):
@@ -141,8 +150,8 @@ def parsing(input, data):
         assignation.assign_func(input, tpe, data)
     elif tpe['assign']:
         assignation.assign_resolve(input, tpe, data)
-    # elif tpe['resolve_equat']:
-    #     resolve_equat(input)
+    elif tpe['resolve_equat']:
+        parse_equat(input[:-1], data)
     # else:
     #     res = resolve(input)
     #     print res
