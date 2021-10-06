@@ -145,13 +145,12 @@ def parse(input):
 #lance le parsing et recupere le type de recherche a faire
 def parsing(input, data):
     tpe = parse(input)
-
     if tpe['assign_func']:
         assignation.assign_func(input, tpe, data)
     elif tpe['assign']:
         assignation.assign_resolve(input, tpe, data)
     elif tpe['resolve_equat']:
         parse_equat(input[:-1], data)
-    # else:
-    #     res = resolve(input)
-    #     print res
+    else:
+        res = calcul.resolve(input, data)
+        print(res)
