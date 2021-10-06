@@ -48,9 +48,9 @@ def calc_mult_matrice(matrice1, matrice2, lign, col, nbr_lign):
     return res
 
 #gere les calculs a effectuer selon les symboles
-def calc(nbr1, nbr2, operator):
-    nbr1 = typesSolver(nbr1)
-    nbr2 = typesSolver(nbr2)
+def calc(nbr1, nbr2, operator, data):
+    nbr1 = typesSolver(nbr1, data)
+    nbr2 = typesSolver(nbr2, data)
     if operator == '+':
         return nbr1.add(nbr2)
     elif operator == '-':
@@ -128,7 +128,7 @@ def npi(input):
     return input[0]
 
 #types specifique pour npi_solver
-def typesSolver(nbr):
+def typesSolver(nbr, data):
     function_regex = re.compile('^[a-z]+\((.+)\)')
     nbr_regex = re.compile('^-?[0-9]+(\.[0-9]+)?')
     matrice_regex = "^\[\[[^],]+(,[^],]+)*\](;\[[^],]+(,[^],]+)*\])*\]"
@@ -143,7 +143,7 @@ def typesSolver(nbr):
     elif re.match(nbr_regex, nbr):
         nbr = type.Rationels(float(nbr))
     elif re.match(matrice_regex, nbr):
-        nbr = parsing.parse_matrice(nbr)
+        nbr = parsing.parse_matrice(nbr, data)
     else:
         print("\033[91mERREUR: Element non reconnu en '" + nbr + "'.\033[0m")
         raise Exception
@@ -153,10 +153,10 @@ def typesSolver(nbr):
 def npi_solver(input, data):
     index = 0
     if len(input) == 1:
-        input[0] = typesSolver(input[0])
+        input[0] = typesSolver(input[0], data)
     while len(input) > 1:
         if isinstance(input[index], basestring) and re.match(r'^\*\*|[\-+/^%=*]$', input[index]):
-            res = calc(input[index-2], input[index-1], input[index])
+            res = calc(input[index-2], input[index-1], input[index], data)
             input[index] = res
             input.pop(index - 1)
             input.pop(index - 2)

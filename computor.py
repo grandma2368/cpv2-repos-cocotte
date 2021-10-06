@@ -16,7 +16,7 @@ def print_vrb(data):
         print(data["matrices"][vrb])
     for vrb in data["function"]:
         func = data["function"][vrb]
-        print(vrb + "(" + func.vrb + ") = " + func.func)
+        print(vrb + "(" + func.var + ") = " + func.func)
 
 #contient toutes les variables de la session ouverte
 data = {"rationel": {}, "complexe": {}, "matrices": {}, "function": {}}
