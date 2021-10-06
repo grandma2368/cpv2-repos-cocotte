@@ -9,7 +9,7 @@ import equation
 def parse_equat(equat, data):
     r = utils.replace_var(equat, data)
     simpler = utils.add_multiplication(utils.add_one_before_x(r))
-    res = utils.parenthesis(simpler)
+    res = utils.parenthesis(simpler, data)
     resBis = utils.add_pow(res)
     equation.resolve(resBis)
 

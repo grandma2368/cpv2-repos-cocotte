@@ -1,9 +1,10 @@
 import re
 import utils
 import type
+import parsing
 
 #reduit l'expression
-def reduction(equat):
+def reduction(equat, data):
     if equat.count('=') == 0:
         tab = utils.to_tab(equat)
         sorted = sortOut(tab)
@@ -48,8 +49,8 @@ def calc_mult_matrice(matrice1, matrice2, lign, col, nbr_lign):
 
 #gere les calculs a effectuer selon les symboles
 def calc(nbr1, nbr2, operator):
-    nbr1 = utils.types(nbr1)
-    nbr2 = utils.types(nbr2)
+    nbr1 = types(nbr1)
+    nbr2 = types(nbr2)
     if operator == '+':
         return nbr1.add(nbr2)
     elif operator == '-':
@@ -65,14 +66,60 @@ def calc(nbr1, nbr2, operator):
     elif operator == '**':
         return nbr1.m_mult(nbr2)
 
+def calcEqua(nbr1, nbr2, operator):
+    nbr1 = types(nbr1)
+    nbr2 = types(nbr2)
+    if operator == '+':
+        if isinstance(nbr2, type.Inconnue):
+            return nbr2.add(nbr1)
+        return nbr1.add(nbr2)
+    elif operator == '-':
+        if isinstance(nbr2, type.Inconnue):
+            return nbr2.sous(nbr1, 1)
+        return nbr1.sous(nbr2)
+    elif operator == '*':
+        if isinstance(nbr2, type.Inconnue):
+            return nbr2.mult(nbr1)
+        return nbr1.mult(nbr2)
+    elif operator == '/':
+        if isinstance(nbr2, type.Inconnue):
+            nbr2.div(nbr1, 1)
+        return nbr1.div(nbr2)
+    elif operator == '%':
+        if isinstance(nbr2, type.Inconnue):
+            nbr2.mod(nbr1)
+        return nbr1.mod(nbr2)
+    elif operator == '^':
+        if isinstance(nbr2, type.Inconnue):
+            nbr2.pow(nbr1, 1)
+        return nbr1.pow(nbr2)
+    elif operator == '**':
+        print("\033[91mError: Can't have ** operator\033[0m")
+        raise Exception
+
+#cherche les types pour les equations
+def types(nbr):
+    nbr_regex = re.compile('^-?[0-9]+(\.[0-9]+)?')
+    if isinstance(nbr, type.Rationels) or isinstance(nbr, type.Inconnue):
+        return nbr
+    if nbr == 'x':
+        nbr = type.Inconnue(1, 1)
+    elif re.match(nbr_regex, nbr):
+        nbr = type.Rationels(float(nbr))
+    else:
+        print("\033[91mERREUR: Ne reconnait pas la variable.\033[0m")
+        raise Exception
+
+    return nbr
+
 #calcule l'expression mathematique
 def npi(input):
     index = 0
     if len(input) == 1:
-        return utils.types(input[0])
+        return types(input[0])
     while len(input) > 1:
         if isinstance(input[index], basestring) and re.match(r'^\*\*|[\-+/^%=*]$', input[index]):
-            res = calc(input[index-2], input[index-1], input[index])
+            res = calcEqua(input[index-2], input[index-1], input[index])
             input[index] = res
             input.pop(index - 1)
             input.pop(index - 2)
@@ -80,11 +127,33 @@ def npi(input):
         index += 1
     return input[0]
 
+#types specifique pour npi_solver
+def typesSolver(nbr, data):
+    function_regex = re.compile('^[a-z]+\((.+)\)')
+    nbr_regex = re.compile('^-?[0-9]+(\.[0-9]+)?')
+    matrice_regex = "^\[\[[^],]+(,[^],]+)*\](;\[[^],]+(,[^],]+)*\])*\]"
+    if isinstance(nbr, type.Rationels) or isinstance(nbr, type.Complex) or isinstance(nbr, type.Matrice):
+        return nbr
+    if nbr == 'i':
+        nbr = type.Complex(0, 1)
+    elif re.match(function_regex, nbr):
+        nbr = resolve_func(nbr)
+    elif nbr.isalpha():
+        nbr = utils.recup_var(nbr)
+    elif re.match(nbr_regex, nbr):
+        nbr = type.Rationels(float(nbr))
+    elif re.match(matrice_regex, nbr):
+        nbr = parsing.parse_matrice(nbr)
+    else:
+        print("\033[91mERREUR: Element non reconnu en '" + nbr + "'.\033[0m")
+        raise Exception
+    return nbr
+
 #calcule l'expression mathematique
 def npi_solver(input, data):
     index = 0
     if len(input) == 1:
-        input[0] = utils.types(input[0], data)
+        input[0] = typesSolver(input[0], data)
     while len(input) > 1:
         if isinstance(input[index], basestring) and re.match(r'^\*\*|[\-+/^%=*]$', input[index]):
             res = calc(input[index-2], input[index-1], input[index])

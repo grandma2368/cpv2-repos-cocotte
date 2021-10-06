@@ -201,13 +201,7 @@ def resolve(input):
 
 
 def resolve_equat(input):
-    #DEBUG/TEST
-    print("resolve_equat")
-    #DEBUG/TEST
     parse_equat(input[:-1], variables)
-    #DEBUG/TEST
-    print("parse_equat")
-    #DEBUG/TEST
 
 
 def assign_func(input, parse_info):
@@ -239,29 +233,14 @@ def assign_resolve(input, parse_info):
 def parsing(input):
     parse_info = parse(input)
 
-    #DEBUG/TEST
-    print("passe dans parsing")
-    #DEBUG/TEST
     if parse_info['assign_func']:
         assign_func(input, parse_info)
-        #DEBUG/TEST
-        print("passe dans assign_func")
-        #DEBUG/TEST
     elif parse_info['assign']:
         assign_resolve(input, parse_info)
-        #DEBUG/TEST
-        print("passe dans assign")
-        #DEBUG/TEST
     elif parse_info['resolve_equat']:
         resolve_equat(input)
-        #DEBUG/TEST
-        print("passe dans resolve_equat")
-        #DEBUG/TEST
     else:
         res = resolve(input)
-        #DEBUG/TEST
-        print("passe dans resolve")
-        #DEBUG/TEST
         print res
     
 

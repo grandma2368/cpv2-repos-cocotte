@@ -64,7 +64,7 @@ def add_pow(equat):
     return equat
 
 #checke les parentheses
-def parenthesis(equat):
+def parenthesis(equat, data):
     index = 0
     parenthese = -1
     parentheses_start = 0
@@ -77,7 +77,7 @@ def parenthesis(equat):
                 parenthese -= 1
                 if parenthese == 0:
                     parenthese = -1
-                    res = parenthesis(equat[parentheses_start + 1:index])
+                    res = parenthesis(equat[parentheses_start + 1:index], data)
                     equat = equat.replace(equat[parentheses_start:index+1], res)
                     index = 0
         if equat[index] == '(':
@@ -87,7 +87,7 @@ def parenthesis(equat):
             else:
                 parenthese += 1
         index += 1
-    return calcul.reduction(equat)
+    return calcul.reduction(equat, data)
 
 #explicite le 1 des +x et -x
 def add_one_before_x(equat):
@@ -99,10 +99,10 @@ def add_one_before_x(equat):
     return expr.replace('-x', '-1x').replace('+x', '+1x')
 
 #remplace les variables par rapport a data
-def replace_var(equat, variables):
+def replace_var(equat, data):
     cpxRgx = "[^a-z]i[^a-z]|^i[^a-z]|[^a-z]i$"
     if re.match(cpxRgx, equat):
-        print("\033[91mError: Can't have complex in equation\033[0m")
+        print("\033[91mERREUR: il ne peut y avoir de complexe dans une equation.\033[0m")
         raise Exception
     index = 0
     while index < len(equat):
@@ -114,20 +114,20 @@ def replace_var(equat, variables):
                     name = match.group(1)
                     calc = '(' + match.group(2) + ')'
 
-                    function = variables["function"][name]
+                    function = data["function"][name]
                     equat = equat.replace(match.group(0), function.func.replace(function.var, calc))
                 index = 0
             else:
                 var = parsing.extract_var(equat[index:])
                 if var != 'x':
                     nbr = ""
-                    if var in variables["rationel"]:
-                        nbr = variables["rationel"][var]
+                    if var in data["rationel"]:
+                        nbr = data["rationel"][var]
                         nbr = str(nbr.nbr)
-                    elif var in variables["complexe"]:
+                    elif var in data["complexe"]:
                         print("\033[91mERREUR: Ne peut resoudre une equation avec un complexe.\033[0m")
                         raise Exception
-                    elif var in variables["matrices"]:
+                    elif var in data["matrices"]:
                         print("\033[91mERREUR: Ne peut resoudre une equation du second degree avec une matrice.\033[0m")
                         raise Exception
                     else:

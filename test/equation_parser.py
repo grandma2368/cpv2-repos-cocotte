@@ -202,13 +202,7 @@ def parse_equat(equat, variables):
     simpler = add_multiplication(add_one_before_x(r))
     res = parenthesis(simpler)
     reso = add_pow(res)
-    #DEBUG/TEST
-    print("pre resolve")
-    #DEBUG/TEST
     resolve(reso)
-    #DEBUG/TEST
-    print("post resolve")
-    #DEBUG/TEST
 
 
 # variables = {"rationel": {"trib": Rationels(21), "ax": Rationels(2)}, "complexe": {}, "matrices": {}, "function": {'f': Function('x^2 + trib', 'x')}}

@@ -1,5 +1,126 @@
 import calcul
 
+#class pour les inconnues d'equations et polynomes
+class Inconnue:
+
+    def __init__(self, coef, puissance):
+        self.nbr = {"0": 0, "1": 0, "2": 0}
+        self.nbr[str(puissance)] = coef
+
+    def to_str(self):
+        str_nbr = ""
+        for key, value in self.nbr.iteritems():
+            if value != 0 and key != '1' and key != '0':
+                str_nbr = str_nbr + str(value) + "*x^" + key + "+"
+            if key == '1' and value != 0:
+                str_nbr = str_nbr + str(value) + "*x+"
+            if key == '0' and value != 0:
+                str_nbr = str_nbr + str(value) + "+"
+        if str_nbr == "":
+            return "0"
+        return str_nbr[:-1]
+
+    def clone(self):
+        clone = Inconnue(0, 0)
+        for key, value in self.nbr.iteritems():
+            clone.nbr[key] = value
+        return clone
+
+    def add(self, nbr):
+        res = self.clone()
+        if isinstance(nbr, Rationels):
+            res.nbr["0"] += nbr.nbr
+            return res
+        if isinstance(nbr, Inconnue):
+            for key, value in nbr.nbr.iteritems():
+                res.nbr[key] += value
+            return res
+
+    def sous(self, nbr, reverse=0):
+        res = self.clone()
+        if isinstance(nbr, Rationels):
+            if reverse == 0:
+                res.nbr["0"] -= nbr.nbr
+            else:
+                res.nbr["0"] = nbr.nbr - res.nbr["0"]
+                for key, value in res.nbr.iteritems():
+                    if key != "0" and value != 0:
+                        res.nbr[key] = -value
+            return res
+        if isinstance(nbr, Inconnue):
+            if reverse == 0:
+                for key, value in nbr.nbr.iteritems():
+                    res.nbr[key] -= value
+            else:
+                for key, value in nbr.nbr.iteritems():
+                    res.nbr[key] = value - res.nbr[key]
+            return res
+
+    def mult(self, nbr):
+        res = self.clone()
+        if isinstance(nbr, Rationels):
+            for key, value in res.nbr.iteritems():
+                if value != 0:
+                    res.nbr[key] *= nbr.nbr
+            return res
+        if isinstance(nbr, Inconnue):
+            for key, value in nbr.nbr.iteritems():
+                if value != 0:
+                    for pow, nbr in res.nbr.iteritems():
+                        if nbr != 0:
+                            res.nbr[str(int(key) + int(pow))] += value * nbr
+                            res.pow = 0
+            return res
+
+    def div(self, nbr, reverse=0):
+        res = self.clone()
+        if isinstance(nbr, Rationels):
+            if reverse == 0:
+                for key, value in res.nbr.iteritems():
+                    if value != 0:
+                        res.nbr[key] /= nbr.nbr
+                return res
+            else:
+                for key, value in res.nbr.iteritems():
+                    if value != 0:
+                        res.nbr[key] = nbr.nbr / res.nbr[key]
+                return res
+        if isinstance(nbr, Inconnue):
+            for key, value in nbr.nbr.iteritems():
+                if value != 0:
+                    for pow, nbr in res.nbr.iteritems():
+                        if nbr != 0:
+                            if reverse == 0:
+                                res.nbr[str(int(key) - int(pow))] += value / nbr
+                                res.nbr[pow] = 0
+                            else:
+                                res.nbr[str(int(pow) - int(key))] += nbr / value
+                                res.nbr[pow] = 0
+            return res
+
+    def mod(self, nbr):
+        print("\033[91mERREUR: Ne peut faire de modulo dans une equation.\033[0m")
+        raise Exception
+
+    def pow(self, nbr, reverse=0):
+        res = Inconnue(0, 0)
+        if isinstance(nbr, Rationels):
+            if reverse == 0 and nbr.nbr > 1:
+                for key, value in self.nbr.iteritems():
+                    if value != 0:
+                        res.nbr[str(int(key) + int(nbr.nbr) - 1)] = value
+            else:
+                print("\033[91mERREUR: Puissance d'une inconnue impossible.\033[0m")
+                raise Exception
+            return res
+        if isinstance(nbr, Inconnue):
+            print("\033[91mERREUR: Puissance d'une inconnue impossible.\033[0m")
+            raise Exception
+
+    def m_mult(self, nbr):
+        print("\033[91mERREUR: Multiplication matricielle non accessible en equation.\033[0m")
+        raise Exception
+
 #class des matrices qui comprend la matrice, son nombre lignes et de colonnes
 class Matrice:
     def __init__(self, matrice, lign, column):
