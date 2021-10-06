@@ -30,10 +30,10 @@ def resolve_func(func, data):
     if match is not None:
         name = match.group(1)
         calc = match.group(2)
-        res = resolve(calc + '=?')
+        res = resolve(calc + '=?', data)
         function = data["function"][name]
         calcul = function.func.replace(function.var, '(' + res.to_str() + ')').replace(' ', '')
-        return resolve(calcul + '=?')
+        return resolve(calcul + '=?', data)
     else:
         print("\033[91mERREUR: La fonction n'est pas conforme.\033[0m")
         raise Exception
@@ -137,9 +137,9 @@ def typesSolver(nbr, data):
     if nbr == 'i':
         nbr = type.Complex(0, 1)
     elif re.match(function_regex, nbr):
-        nbr = resolve_func(nbr)
+        nbr = resolve_func(nbr, data)
     elif nbr.isalpha():
-        nbr = utils.recup_var(nbr)
+        nbr = utils.recup_var(nbr, data)
     elif re.match(nbr_regex, nbr):
         nbr = type.Rationels(float(nbr))
     elif re.match(matrice_regex, nbr):
