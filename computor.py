@@ -3,6 +3,8 @@ import re
 import parsing
 import utils
 
+data = {"rationel": {}, "complexe": {}, "matrices": {}, "function": {}}
+
 while 1:
     input = raw_input('> ')
     input = re.sub(r'[ \t]', '', input).lower()
@@ -15,6 +17,6 @@ while 1:
         # print_var()
     else:
         try:
-            parsing.parsing(input)
+            parsing.parsing(input, data)
         except:
             pass

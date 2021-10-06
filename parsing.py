@@ -1,4 +1,24 @@
 import re
+import assignation
+
+#retourne une matrice s'il y en a une
+def extract_matrice(input):
+    rgx = "^\[\[[^],]+(,[^],]+)*\](;\[[^],]+(,[^],]+)*\])*\]"
+    match = re.search(rgx, input)
+    if match is not None:
+        return match.group(0)
+    else:
+        return None
+
+#retourne un nombre s'il y en a un
+def extract_nbr(input):
+    rgx = "^\-?[0-9]+(\.[0-9]+)?"
+    match = re.search(rgx, input)
+    if match is not None:
+        return match.group(0)
+    else:
+        return None
+
 
 #retourne le nom de la variable s'il est valide
 def extract_var(input):
@@ -72,13 +92,13 @@ def parse(input):
     return tpeInfo
 
 #lance le parsing et recupere le type de recherche a faire
-def parsing(input):
+def parsing(input, data):
     tpe = parse(input)
 
-    # if tpe['assign_func']:
-    #     assign_func(input, tpe)
+    if tpe['assign_func']:
+        assignation.assign_func(input, tpe, data)
     # elif tpe['assign']:
-    #     assign_resolve(input, tpe)
+    #     assign_resolve(input, tpe, data)
     # elif tpe['resolve_equat']:
     #     resolve_equat(input)
     # else:
