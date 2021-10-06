@@ -3,6 +3,7 @@ import assignation
 import type
 import calcul
 import utils
+import equation
 
 #parse une equation
 def parse_equat(equat, data):
@@ -10,7 +11,7 @@ def parse_equat(equat, data):
     simpler = utils.add_multiplication(utils.add_one_before_x(r))
     res = utils.parenthesis(simpler)
     resBis = utils.add_pow(res)
-    calcul.resolve(resBis, data)
+    equation.resolve(resBis)
 
 #parse une matrice
 def parse_matrice(matrice_str, data):

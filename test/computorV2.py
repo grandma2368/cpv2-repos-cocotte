@@ -16,6 +16,9 @@ while 1:
     else:
         try:
             parsing(input)
+            #DEBUG/TEST
+            print("sort du parsing")
+            #DEBUG/TEST
 
         except:
             pass

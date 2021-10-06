@@ -3,6 +3,48 @@ import re
 import type
 import calcul
 
+#fonction racine carree
+def guess_close_nbr(nbr):
+    guess = round(nbr / 2)
+    while guess * guess > nbr:
+        guess -= 1
+    return guess if guess != 0 else 1
+
+def better_approx(nbr, approx):
+    return (approx + nbr/approx)/2
+
+def ft_sqrt(nbr):
+    approx = guess_close_nbr(nbr)
+    for i in range(3):
+        approx = better_approx(nbr, approx)
+        i += 1
+    return round(approx, 3)
+
+#gere les multiplications implicites par -1
+def add_int(equat, index, sign, content):
+    nbr = ''
+    while index < len(equat) and (equat[index].isdigit() or equat[index] == '.' or equat[index] == ','):
+        nbr += equat[index]
+        index += 1
+    content.append(float(nbr) if sign == 1 else -float(nbr))
+    return len(nbr)
+
+#passe l'equation en tableau
+def content_to_tab(content):
+    eq_tab = {0: 0, 1: 0, 2: 0}
+    index = 0
+    while index < len(content) and content[index] != '=':
+        eq_tab[int(abs(content[index + 1]))] = content[index]
+        index += 2
+    index += 1
+    while index < len(content):
+        if eq_tab.has_key(int(abs(content[index + 1]))):
+            eq_tab[int(abs(content[index + 1]))] -= content[index]
+        else:
+            eq_tab[int(abs(content[index + 1]))] = -content[index]
+        index += 2
+    return eq_tab
+
 #explicite la puissance 1
 def add_pow(equat):
     index = 0
