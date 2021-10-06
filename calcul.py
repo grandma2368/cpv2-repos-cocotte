@@ -49,8 +49,8 @@ def calc_mult_matrice(matrice1, matrice2, lign, col, nbr_lign):
 
 #gere les calculs a effectuer selon les symboles
 def calc(nbr1, nbr2, operator):
-    nbr1 = types(nbr1)
-    nbr2 = types(nbr2)
+    nbr1 = typesSolver(nbr1)
+    nbr2 = typesSolver(nbr2)
     if operator == '+':
         return nbr1.add(nbr2)
     elif operator == '-':
@@ -128,7 +128,7 @@ def npi(input):
     return input[0]
 
 #types specifique pour npi_solver
-def typesSolver(nbr, data):
+def typesSolver(nbr):
     function_regex = re.compile('^[a-z]+\((.+)\)')
     nbr_regex = re.compile('^-?[0-9]+(\.[0-9]+)?')
     matrice_regex = "^\[\[[^],]+(,[^],]+)*\](;\[[^],]+(,[^],]+)*\])*\]"
@@ -153,7 +153,7 @@ def typesSolver(nbr, data):
 def npi_solver(input, data):
     index = 0
     if len(input) == 1:
-        input[0] = typesSolver(input[0], data)
+        input[0] = typesSolver(input[0])
     while len(input) > 1:
         if isinstance(input[index], basestring) and re.match(r'^\*\*|[\-+/^%=*]$', input[index]):
             res = calc(input[index-2], input[index-1], input[index])
